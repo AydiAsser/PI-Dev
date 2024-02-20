@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\MedecinRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MedecinRepository::class)]
-class Medecin
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,6 +39,9 @@ class Medecin
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $degree = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $role = null;
+
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class)]
     private Collection $articles;
 
@@ -61,6 +64,18 @@ class Medecin
     public function setFirstName(?string $firstName): static
     {
         $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(?string $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }

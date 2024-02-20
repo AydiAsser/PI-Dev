@@ -16,7 +16,7 @@ class Article
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
-    private ?Medecin $author;
+    private ?user $author;
 
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -37,6 +37,10 @@ class Article
     #[ORM\OneToMany(mappedBy: 'article_id', targetEntity: Commentaire::class)]
     private Collection $commentaires;
 
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    private $likesList = [];
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
@@ -46,17 +50,29 @@ class Article
         $this->nbComments = 0;
     }
 
+    public function getLikesList(): ?array
+    {
+        return $this->likesList;
+    }
+
+    public function setLikesList(?array $likesList): self
+    {
+        $this->likesList = $likesList;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAuthor(): ?Medecin
+    public function getAuthor(): ?user
     {
         return $this->author;
     }
 
-    public function setAuthor(?Medecin $author): static
+    public function setAuthor(?user $author): static
     {
         $this->author = $author;
 

@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Article;
-use App\Entity\Medecin;
+use App\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -27,7 +27,7 @@ class ArticleType extends AbstractType
             //     'data' => 0,
             // ])
             ->add('author', EntityType::class, [
-                'class' => Medecin::class,
+                'class' => User::class,
                 'choice_label' => 'id',
             ]);
     }

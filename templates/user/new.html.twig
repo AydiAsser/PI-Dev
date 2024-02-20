@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Patient{% endblock %}
+{% block title %}New User{% endblock %}
 
 {% block body %}
 
@@ -16,11 +16,9 @@
         </div>
     </div>
     
-    <h1>Edit Patient</h1>
+    <h1>Create new User</h1>
 
-    {{ include('patient/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('user/_form.html.twig') }}
 
-    <a href="{{ path('app_patient_index') }}">back to list</a>
-
-    {{ include('patient/_delete_form.html.twig') }}
+    <a href="{{ path('app_user_index') }}">back to list</a>
 {% endblock %}

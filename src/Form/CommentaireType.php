@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Commentaire;
 use App\Entity\Article;
-use App\Entity\Patient;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +22,7 @@ class CommentaireType extends AbstractType
                 'choice_label' => 'id',
             ])
             ->add('commenter_id', EntityType::class, [
-                'class' => Patient::class,
+                'class' => User::class,
                 'choice_label' => 'id',
             ]);;
     }

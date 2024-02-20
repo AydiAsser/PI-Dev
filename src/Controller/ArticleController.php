@@ -18,7 +18,7 @@ class ArticleController extends AbstractController
 {
 
     #[Route('/like/{idArticle}', name: 'app_article_like', methods: ['GET'])]
-    public function likeArticle($idArticle, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
+    public function likeArticle($idArticle, Request $request, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
     {
         // Retrieve the Article entity by id
         $article = $articleRepository->find($idArticle);
@@ -27,8 +27,28 @@ class ArticleController extends AbstractController
             throw $this->createNotFoundException('Article not found');
         }
 
-        // Increment the number of likes
-        $article->setNbLikes($article->getNbLikes() + 1);
+        // Get the client IP address
+        $clientIP = $request->getClientIp();
+
+        // Get the list of likes
+        $likesList = $article->getLikesList();
+
+        // Ensure $likesList is initialized as an array
+        $likesList = $likesList ?? [];
+
+        // Check if the IP address has already liked the article
+        if (in_array($clientIP, $likesList)) {
+            // IP address has already liked the article, remove like
+            $likesList = array_diff($likesList, array($clientIP));
+            $article->setLikesList($likesList);
+            $article->setNbLikes($article->getNbLikes() - 1);
+        } else {
+            // IP address hasn't liked the article, add like
+            $likesList[] = $clientIP;
+            $article->setLikesList($likesList);
+            $article->setNbLikes($article->getNbLikes() + 1);
+        }
+
         $entityManager->flush();
 
         // Redirect back to the index page or return a JsonResponse with updated data

@@ -17,7 +17,7 @@ class Commentaire
     private ?Article $article_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?Patient $commenter_id = null;
+    private ?User $commenter_id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $contenu = null;
@@ -49,12 +49,12 @@ class Commentaire
         return $this;
     }
 
-    public function getCommenterId(): ?Patient
+    public function getCommenterId(): ?User
     {
         return $this->commenter_id;
     }
 
-    public function setCommenterId(?Patient $commenter_id): static
+    public function setCommenterId(?User $commenter_id): static
     {
         $this->commenter_id = $commenter_id;
 
