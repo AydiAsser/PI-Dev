@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset("front/css/style2.css") }}">
+    <link rel="stylesheet" href="{{ asset("front/css/bootstrap2.min.css") }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600&family=Roboto&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    {# <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet"> #}
+{% endblock %}
+
+{% block body %}
+  <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="bradcam_text">
+            <h3>blog</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Header End -->
+
+  <!-- Blog Start -->
+  <div class="container-fluid blog py-5">
+    <div class="container py-5">
+      <div class="mx-auto text-center mb-5" style="max-width: 900px;">
+        <h5 class="section-title px-3">Our Blog</h5>
+        <h1 class="mb-4">Popular medical Blogs</h1>
+        <p class="mb-0">Explore the latest insights, trends, and discoveries in the world of medicine. From groundbreaking research to expert opinions, our collection of medical blogs covers a wide range of topics to keep you informed and inspired.</p>
+      </div>
+      <div class="row g-4 justify-content-center">
+        {% for article in articles %}
+          <div class="col-lg-4 col-md-6">
+            <div class="blog-item">
+              <div class="blog-img">
+                <div class="blog-img-inner">
+                  <img class="img-fluid w-100 rounded-top" src="{{ asset("front/img/blog-1.jpg") }}" alt="Image">
+                  <div class="blog-icon">
+                    <a href="{{ path('app_article_show', {'id': article.id}) }}" class="my-auto"><i class="fas fa-link fa-2x text-white"></i></a>
+                  </div>
+                </div>
+                <div class="blog-info d-flex align-items-center border border-start-0 border-end-0">
+                  <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar-alt text-primary me-2"></i>{{ article.createdAt ? article.createdAt|date('Y-m-d') : '' }}</small>
+                 
+                  <a class="btn-hover flex-fill text-center text-white border-end py-2 like-button" href="{{ path('app_article_like', {'idArticle': article.id}) }}">
+                            <i type="submit" class="fa fa-thumbs-up text-primary me-2"></i> {{ article.nbLikes }}
+</a>
+
+
+                  <span class="btn-hover flex-fill text-center text-white py-2"><i class="fa fa-comments text-primary me-2"></i>{{ article.nbComments }}</span>
+                </div>
+              </div>
+              <div class="blog-content border border-top-0 rounded-bottom p-4">
+                <p class="mb-3">Posted By: {{ article.author.getFirstName() }} {{ article.author.getLastName() }}</p>
+                <a href="#" class="h4">{{ article.title }}</a>
+                <p class="my-3">{{ article.contenu }}</p>
+                <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-primary rounded-pill py-2 px-4">Read More</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+{% block javascripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    // JavaScript code to handle the like functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all thumbs-up icons
+    var thumbsUpIcons = document.querySelectorAll('.fa-thumbs-up');
+
+    // Add click event listener to each thumbs-up icon
+    thumbsUpIcons.forEach(function(icon) {
+        icon.addEventListener('click', function(event) {
+            // Get the article ID from the data-article-id attribute
+            var articleId = icon.getAttribute('data-article-id');
+
+            // Send a POST request to the like endpoint
+            fetch('/like/' + articleId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Add this header for Symfony to detect AJAX request
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the like count on the page
+                icon.nextElementSibling.textContent = data.likes;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+
+  </script>
+{% endblock %}
+{% endblock %}

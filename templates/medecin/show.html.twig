@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Medecin{% endblock %}
+
+{% block body %}
+
+   <div class="bradcam_area ">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <h1>Medecin</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ medecin.id }}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ medecin.firstName }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ medecin.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ medecin.email }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ medecin.password }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNumber</th>
+                <td>{{ medecin.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td>{{ medecin.region }}</td>
+            </tr>
+            <tr>
+                <th>Rate</th>
+                <td>{{ medecin.rate }}</td>
+            </tr>
+            <tr>
+                <th>Degree</th>
+                <td>{{ medecin.degree }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_medecin_index') }}">back to list</a>
+
+    <a href="{{ path('app_medecin_edit', {'id': medecin.id}) }}">edit</a>
+
+    {{ include('medecin/_delete_form.html.twig') }}
+{% endblock %}

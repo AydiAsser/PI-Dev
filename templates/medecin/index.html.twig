@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Medecin index{% endblock %}
+
+{% block body %}
+
+      <div class="bradcam_area ">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <h1>Medecin index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>PhoneNumber</th>
+                <th>Region</th>
+                <th>Rate</th>
+                <th>Degree</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for medecin in medecins %}
+            <tr>
+                <td>{{ medecin.id }}</td>
+                <td>{{ medecin.firstName }}</td>
+                <td>{{ medecin.lastName }}</td>
+                <td>{{ medecin.email }}</td>
+                <td>{{ medecin.password }}</td>
+                <td>{{ medecin.phoneNumber }}</td>
+                <td>{{ medecin.region }}</td>
+                <td>{{ medecin.rate }}</td>
+                <td>{{ medecin.degree }}</td>
+                <td>
+                    <a href="{{ path('app_medecin_show', {'id': medecin.id}) }}">show</a>
+                    <a href="{{ path('app_medecin_edit', {'id': medecin.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_medecin_new') }}">Create new</a>
+{% endblock %}

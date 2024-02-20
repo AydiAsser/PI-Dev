@@ -1,0 +1,20 @@
+<div class="card">
+    <div class="card-body">
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.article_id, 'Article', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.article_id, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.commenter_id, 'Author', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.commenter_id, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {{ form_end(form) }}
+    </div>
+</div>
