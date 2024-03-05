@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+
+{% block body %}
+
+<body>
+ 
+    <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>blog</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- bradcam_area_end  -->
+
+
+
+ <div class="mx-auto text-center mb-5" style="margin-top:20px;max-width: 900px;">
+        <h1 class="mb-4">Edit Article</h1>
+
+        </div>
+    {{ include('article/_form.html.twig', {'button_label': 'Update'}) }}
+
+        <a style="margin-left:20px;margin-bottom:20px;" class="genric-btn success radius" href="{{ path('app_article_index') }}">back to list</a>
+
+    {{ include('article/_delete_form.html.twig') }}
+
+
+{% endblock %}
+
+
+
+
+   

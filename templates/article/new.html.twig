@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+
+{% block body %}
+
+<body>
+
+     <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>blog</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+ <div class="mx-auto text-center mb-5" style="margin-top:20px;max-width: 900px;">
+        <h1 class="mb-4">Create new Article</h1>
+
+        </div>
+    
+
+    {{ include('article/_form.html.twig') }}
+
+    <a style="margin-left:20px;margin-bottom:20px;" class="genric-btn primary radius" href="{{ path('app_article_index') }}">back to list</a>
+
+
+    <!--================Blog Area =================-->
+    
+   
+</body>
+{% endblock %}
+
+
+
