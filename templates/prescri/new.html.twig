@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Prescri{% endblock %}
+
+{% block body %}
+    <h1>Create new Prescri</h1>
+
+    {{ include('prescri/_form.html.twig') }}
+
+    <a href="{{ path('app_prescri_index') }}">back to list</a>
+{% endblock %}

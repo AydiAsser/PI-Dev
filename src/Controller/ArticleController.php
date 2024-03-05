@@ -23,50 +23,64 @@ use Symfony\Component\HttpClient\HttpClient;
 use MYPDF;
 use TCPDF;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use App\Form\LikeType;
-use App\Service\LikeService;
+
 
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
 
     #[Route('/like/{idArticle}', name: 'app_article_like', methods: ['POST'])]
-    public function likeArticle(SessionInterface $session, UserRepository $repository,$idArticle, ArticleRepository $articleRepository , Request $request, LikeService $likeService): Response
+    public function likeArticle(SessionInterface $session, UserRepository $repository,$idArticle, Request $request, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
     {
+        $article = $articleRepository->find($idArticle);
 
-       
-
-        $form = $this->createForm(LikeType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-
-            $article = $articleRepository->find($idArticle);
-    
-            $myValue = $session->get('my_key');
-            if (!$myValue) {
-                throw new \Exception('Session key not found.');
-            }
-    
-            $u = $repository->find($myValue->getId());
-            if (!$u) {
-                throw new \Exception('User not found.');
-            }
-    
-            if (!$article) {
-                throw new \Exception('Article not found.');
-            }
-    
-            $userID = $u->getId();
-            // Call the like/unlike service method
-            $newLikeCount = $likeService->toggleLike($article, $u);
-
-            // Return the updated like count as JSON response
-            return new JsonResponse(['likes' => $newLikeCount]);
+        $myValue = $session->get('my_key');
+        if (!$myValue) {
+            throw new \Exception('Session key not found.');
         }
 
-        return new Response('Invalid request', Response::HTTP_BAD_REQUEST);
+        $u = $repository->find($myValue->getId());
+        if (!$u) {
+            throw new \Exception('User not found.');
+        }
+
+        if (!$article) {
+            throw new \Exception('Article not found.');
+        }
+
+        $userID = $u->getId();
+
+        if (!$article) {
+            return new Response('Article not found', Response::HTTP_NOT_FOUND);
+        }
+
+        // Get the list of likes
+        $likesList = $article->getLikesList();
+
+        // Ensure $likesList is initialized as an array
+        $likesList = $likesList ?? [];
+
+        // // Get the client IP address
+        // $clientIP = $request->getClientIp();
+
+        if (in_array($userID, $likesList)) {
+            $likesList = array_diff($likesList, array($userID));
+            $article->setLikesList($likesList);
+            $article->setNbLikes($article->getNbLikes() - 1);
+        } else {
+            $likesList[] = $userID;
+            $article->setLikesList($likesList);
+            $article->setNbLikes($article->getNbLikes() + 1);
+        }
+
+        $entityManager->flush();
+
+        // Return the updated like count as JSON response
+        $response = [
+            'likes' => $article->getNbLikes()
+        ];
+
+        return $this->json($response);
     }
     
 

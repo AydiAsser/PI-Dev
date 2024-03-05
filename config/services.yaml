@@ -7,6 +7,7 @@
 parameters:
     pictures_directory: '%kernel.project_dir%/public/uploads/pictures'
     app.forbidden_words: ['word1', 'ESPRIT','word2', 'word3' , 'esprit']
+    photo_dir: "public/assets/images/explore"
 
 
 services:

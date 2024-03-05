@@ -17,3 +17,10 @@ app_comment_delete:
     controller: App\Controller\CommentaireController::delete
     methods: ['POST']
 
+searchmedi:
+    path: /medicament/search
+    controller: App\Controller\MedicamentController::searchmedi
+   
+app_add_to_cart:
+    path: '/add-to-cart/{id}'
+    controller: 'App\Controller\PanierController::addToCart'

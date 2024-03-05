@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\MedicamentRepository;
 
 
 class HomeController extends AbstractController
@@ -61,10 +62,6 @@ class HomeController extends AbstractController
     }
 
  
-
-
-
-
     #[route('/test/{id}',name:'test')]
    public function test($id)
    {
@@ -72,5 +69,27 @@ class HomeController extends AbstractController
 return $this->render('home/home.html.twig', ['param'=>$id]);
 
    }
+
+   
+   #[Route('/statsMedi', name: 'app_statss')]
+   public function statistiquesss(MedicamentRepository $transprepo)
+   {
+       $transprepo = $transprepo->findAll();
+
+       $transpId = [];
+       
+       foreach( $transprepo as $transport_reservations){
+           $transpId[] = $transport_reservations->getNom();
+           $occurrences = array_count_values($transpId);
+       }
+
+
+       return $this->render('statMedi.html.twig', [
+           'transpId' => json_encode($transpId),
+           'transpIdCount' => json_encode($occurrences),
+       ]);
+   }
+
+
 
 }
