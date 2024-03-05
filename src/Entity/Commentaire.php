@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommentaireRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CommentaireRepository::class)]
 class Commentaire
@@ -13,13 +14,17 @@ class Commentaire
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?Article $article_id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?User $commenter_id = null;
+    #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: "commentaires")]
+    #[ORM\JoinColumn(name: "article", referencedColumnName: "id", nullable: false)]
+    private ?Article $article = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(name: 'commenter_id', referencedColumnName: 'id')]
+    private ?User $commenter = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Assert\NotBlank(message: "Le commentaire ne peut pas être vide")]
     private ?string $contenu = null;
 
     #[ORM\Column(nullable: true)]
@@ -37,26 +42,26 @@ class Commentaire
         return $this->id;
     }
 
-    public function getArticleId(): ?Article
+    public function getArticle(): ?Article
     {
-        return $this->article_id;
+        return $this->article;
     }
 
-    public function setArticleId(?Article $article_id): static
+    public function setArticle(?Article $article): static
     {
-        $this->article_id = $article_id;
+        $this->article = $article;
 
         return $this;
     }
 
-    public function getCommenterId(): ?User
+    public function getCommenter(): ?User
     {
-        return $this->commenter_id;
+        return $this->commenter;
     }
 
-    public function setCommenterId(?User $commenter_id): static
+    public function setCommenter(?User $commenter): static
     {
-        $this->commenter_id = $commenter_id;
+        $this->commenter = $commenter;
 
         return $this;
     }

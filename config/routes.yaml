@@ -2,3 +2,17 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
+
+download_pdf:
+    path: '/download-pdf'
+    controller: 'App\Controller\ArticleController::downloadPdf'
+
+app_article_sort:
+    path: /sort
+    controller: App\Controller\ArticleController::sort
+    methods: ['GET']
+
+app_comment_delete:
+    path: /commentaire/{id}
+    controller: App\Controller\CommentaireController::delete
+    methods: ['POST']

@@ -1,5 +1,38 @@
+{% block stylesheets %}
+    
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HealthGuard</title>
+  <link rel="shortcut icon" type="image/png" href="{{ asset("front/img/logoo.png") }}" />
+  <link rel="stylesheet" href="{{ asset("admin/assets/css/styles.min.css") }}" />
+</head>
 
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% endblock %}
+
+<div class="card">
+    <div class="card-body">
+        {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+        <div class="mb-3">
+            {{ form_label(form.title, 'Title', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+ {% if form_errors(form.title) %}
+        <span class="text-danger">{{ form_errors(form.title) }}</span>
+    {% endif %}        </div>
+        <div class="mb-3">
+            {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'form-control'}}) }}
+ {% if form_errors(form.contenu) %}
+        <span class="text-danger">{{ form_errors(form.contenu) }}</span>
+    {% endif %}        
+    </div>
+        <div class="mb-3">
+            {{ form_label(form.author, 'Author', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.author, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.author) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+

@@ -1,0 +1,37 @@
+<div class="card">
+    <div class="card-body">
+{{ form_start(form,{'attr':{' novalidate':' novalidate'}}) }}
+
+        <div class="mb-3">
+            {{ form_label(form.contenu, 'Contenu', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'form-control'}}) }}
+
+        </div>
+        <span class="" type="text" class="form-control" id="comment-error-message"></span>
+
+        <div class="mb-3">
+            {{ form_label(form.article, 'Article', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.article, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.commenter, 'Author', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.commenter, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <button id="submitt" type="submit" class="btn btn-primary">Submit</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+
+<style>
+.error-message {
+position:relative;
+left:13%;
+top:-10px;
+    color: red; /* Set the text color to red or any color you prefer */
+    margin-top: 5px; /* Add margin to create space between the input field and the error message */
+    font-size: 14px; /* Set the font size for the error message */
+}
+
+</style>
+

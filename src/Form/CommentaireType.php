@@ -17,11 +17,11 @@ class CommentaireType extends AbstractType
         $builder
             ->add('contenu')
             // ->add('created_at')
-            ->add('article_id', EntityType::class, [
+            ->add('article', EntityType::class, [
                 'class' => Article::class,
                 'choice_label' => 'id',
             ])
-            ->add('commenter_id', EntityType::class, [
+            ->add('commenter', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
             ]);;

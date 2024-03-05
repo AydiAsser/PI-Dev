@@ -115,14 +115,7 @@
               </a>
               
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ path('app_commentaire_admin_index') }}" aria-expanded="false">
-                <span>
-                  <i class="ti ti-pencil"></i>
-                </span>
-                <span class="hide-menu">Comments</span>
-              </a>
-            </li>
+            
            
         </nav>
         <!-- End Sidebar navigation -->
@@ -185,15 +178,11 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Edit Article</h5>
+            <h5 class="card-title fw-semibold mb-4">Add New Article</h5>
             {# <p class="mb-0">This is a sample page </p> #}
-
-              {{ include('article/admin_form.html.twig', {'button_label': 'Update'}) }}
+             {{ include('article/admin/admin_form.html.twig') }}
 
     <a href="{{ path('app_article_admin_index') }}">back to list</a>
-
-    {{ include('article/admin_delete_form.html.twig') }}
-
           </div>
         </div>
       </div>

@@ -9,6 +9,10 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class ArticleType extends AbstractType
 {
@@ -16,19 +20,18 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('contenu')
-            // ->add('created_at', DateTimeType::class, [
-            //     'data' => new \DateTime(),
-            // ])
-            // ->add('nbLikes', null, [
-            //     'data' => 0,
-            // ])
-            // ->add('nbComments', null, [
-            //     'data' => 0,
-            // ])
+            ->add('contenu', TextareaType::class, [
+                'required' => false, // depending on your validation rules
+                'attr' => ['rows' => 10], // adjust rows as per your preference
+            ])
             ->add('author', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
+            ])
+            ->add('pictureFile', VichFileType::class, [
+                'required' => false,
+                'allow_delete' => false,
+                'download_uri' => false,
             ]);
     }
 

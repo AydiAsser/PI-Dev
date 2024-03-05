@@ -115,14 +115,7 @@
               </a>
               
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ path('app_commentaire_admin_index') }}" aria-expanded="false">
-                <span>
-                  <i class="ti ti-pencil"></i>
-                </span>
-                <span class="hide-menu">Comments</span>
-              </a>
-            </li>
+            
            
         </nav>
         <!-- End Sidebar navigation -->
@@ -185,11 +178,36 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Add New Comment</h5>
+            <h5 class="card-title fw-semibold mb-4">Article Details</h5>
             {# <p class="mb-0">This is a sample page </p> #}
-             {{ include('commentaire/admin_form.html.twig') }}
 
-    <a href="{{ path('app_commentaire_admin_index') }}">back to list</a>
+            <div class="card">
+    <div class="card-body">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th scope="row">Id</th>
+                    <td>{{ commentaire.id }}</td>
+                </tr>
+               
+                <tr>
+                    <th scope="row">Contenu</th>
+                    <td>{{ commentaire.contenu }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Created_at</th>
+                    <td>{{ commentaire.createdAt ? commentaire.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+               
+            </tbody>
+        </table>
+        <a href="https://127.0.0.1:8000/article/admin/" class="btn btn-secondary">Back to List</a>
+        <a href="{{ path('app_commentaire_admin_edit', {'id': commentaire.id}) }}" class="btn btn-primary">Edit</a>
+        {{ include('commentaire/admin/admin_delete_form.html.twig') }}
+    </div>
+</div>
+
+
           </div>
         </div>
       </div>

@@ -115,14 +115,7 @@
               </a>
               
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ path('app_commentaire_admin_index') }}" aria-expanded="false">
-                <span>
-                  <i class="ti ti-pencil"></i>
-                </span>
-                <span class="hide-menu">Comments</span>
-              </a>
-            </li>
+            
            
         </nav>
         <!-- End Sidebar navigation -->
@@ -185,11 +178,13 @@
       <div class="container-fluid">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Add New Article</h5>
+            <h5 class="card-title fw-semibold mb-4">Add New Comment</h5>
             {# <p class="mb-0">This is a sample page </p> #}
-             {{ include('article/admin_form.html.twig') }}
+             {{ include('commentaire/admin/admin_form.html.twig') }}
 
-    <a href="{{ path('app_article_admin_index') }}">back to list</a>
+    <a href="https://127.0.0.1:8000/article/admin/">back to list</a>
+
+    
           </div>
         </div>
       </div>

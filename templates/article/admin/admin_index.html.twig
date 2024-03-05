@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HealthGuard</title>
-  <link rel="shortcut icon" type="image/png" href="{{asset("front/img/logoo3.png")}}" />
+  <link rel="shortcut icon" type="image/png" href="{{asset("front/img/logoo.png")}}" />
   <link rel="stylesheet" href="{{asset("admin/assets/css/styles.min.css")}}" />
 </head>
 
@@ -115,14 +115,7 @@
               </a>
               
             </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="{{ path('app_commentaire_admin_index') }}" aria-expanded="false">
-                <span>
-                  <i class="ti ti-pencil"></i>
-                </span>
-                <span class="hide-menu">Comments</span>
-              </a>
-            </li>
+           
            
         </nav>
         <!-- End Sidebar navigation -->
@@ -183,48 +176,118 @@
 
       <!--  body start -->
       <div class="container-fluid">
+<a style="position: relative; left: 450;" href="{{ path('download_pdf') }}" class="btn btn-primary">Download PDF</a>
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Article Details</h5>
+            <h5 class="card-title fw-semibold mb-4">Articles</h5>
             {# <p class="mb-0">This is a sample page </p> #}
 
-            <div class="card">
-    <div class="card-body">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th scope="row">Id</th>
-                    <td>{{ article.id }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Author</th>
-                    <td> {{ article.author.getFirstName() }} {{ article.author.getLastName() }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Title</th>
-                    <td>{{ article.title }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Contenu</th>
-                    <td>{{ article.contenu }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">Created_at</th>
-                    <td>{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">NbLikes</th>
-                    <td>{{ article.nbLikes }}</td>
-                </tr>
-                <tr>
-                    <th scope="row">NbComments</th>
-                    <td>{{ article.nbComments }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <a href="{{ path('app_article_admin_index') }}" class="btn btn-secondary">Back to List</a>
-        <a href="{{ path('app_article_admin_edit', {'id': article.id}) }}" class="btn btn-primary">Edit</a>
-        {{ include('article/admin_delete_form.html.twig') }}
+<div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+        <div class="card-body p-4">
+
+
+{# Add the download button to your HTML template #}
+{# <button id="downloadPdfButton" class="btn btn-primary">Download PDF</button> #}
+
+<script>
+    $(document).ready(function() {
+        $('#downloadPdfButton').click(function() {
+            // Send an AJAX request to download the PDF file
+            $.ajax({
+                url: '{{ path('download_pdf') }}', // Replace with your route
+                method: 'GET',
+                success: function(response) {
+                    // Create a hidden link and trigger the download
+                    var link = document.createElement('a');
+                    link.href = response.url;
+                    link.download = response.filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
+            {# <h5 class="card-title fw-semibold mb-4">Recent Articles</h5> #}
+            <div class="table-responsive">
+                <table class="table text-nowrap mb-0 align-middle">
+                    <thead class="text-dark fs-4">
+                        <tr>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Id</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Author</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Title</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Contenu</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Created_at</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">NbLikes</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">NbComments</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">Actions</h6>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles %}
+                        <tr>
+                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0">{{ article.id }}</h6></td>
+<td class="border-bottom-0">
+    {% if article.author is not null %}
+        <h6 class="fw-semibold mb-0"> {{ article.author.getFirstName() }} {{ article.author.getLastName() }}</h6>
+    {% else %}
+        <p class="text-muted">No author</p>
+    {% endif %}
+</td>                            
+
+<td class="border-bottom-0"><h6 class="fw-semibold mb-0">{{ article.title }}</h6></td>
+<td class="border-bottom-0">
+    <p class="mb-0 fw-normal">{{ article.contenu|slice(0, 10) }}</p>
+</td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0 fs-4">{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</h6>
+                            </td>
+                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0 fs-4">{{ article.nbLikes }}</h6></td>
+                            <td class="border-bottom-0"><h6 class="fw-semibold mb-0 fs-4">{{ article.nbComments }}</h6></td>
+                            <td class="border-bottom-0">
+                                <div class="d-flex gap-2">
+                                    <a href="{{ path('app_article_admin_show', {'id': article.id}) }}" class="btn btn-primary">Show</a>
+                                    <a href="{{ path('app_article_admin_edit', {'id': article.id}) }}" class="btn btn-secondary">Edit</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7">No records found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{{ path('app_article_admin_new') }}" class="btn btn-success mt-3">Create new</a>
+        </div>
     </div>
 </div>
 

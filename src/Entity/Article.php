@@ -6,6 +6,10 @@ use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -16,13 +20,17 @@ class Article
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'articles')]
-    private ?user $author;
+    private ?User $author;
 
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "Le titre de l'article ne peut pas être vide")]
+    #[Assert\Length(min: 5, minMessage: "Le titre doit comporter au moins 5 caractères.")]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Assert\NotBlank(message: "Le contenu de l'article ne peut pas être vide")]
+    #[Assert\Length(min: 20, minMessage: "Le contenu de l'article doit comporter au moins 20 caractères.")]
     private ?string $contenu = null;
 
     #[ORM\Column(nullable: true)]
@@ -34,12 +42,18 @@ class Article
     #[ORM\Column(nullable: true)]
     private ?int $nbComments = null;
 
-    #[ORM\OneToMany(mappedBy: 'article_id', targetEntity: Commentaire::class)]
+    #[ORM\OneToMany(mappedBy: 'article', targetEntity: Commentaire::class)]
     private Collection $commentaires;
-
 
     #[ORM\Column(type: 'json', nullable: true)]
     private $likesList = [];
+
+    #[ORM\Column(nullable: true)]
+    private ?string $picture = null;
+
+    #[Vich\UploadableField(mapping: "article_pictures", fileNameProperty: "picture")]
+    private ?File $pictureFile = null;
+
 
     public function __construct()
     {
@@ -151,7 +165,7 @@ class Article
     {
         if (!$this->commentaires->contains($commentaire)) {
             $this->commentaires->add($commentaire);
-            $commentaire->setArticleId($this);
+            $commentaire->setArticle($this);
         }
 
         return $this;
@@ -161,10 +175,35 @@ class Article
     {
         if ($this->commentaires->removeElement($commentaire)) {
             // set the owning side to null (unless already changed)
-            if ($commentaire->getArticleId() === $this) {
-                $commentaire->setArticleId(null);
+            if ($commentaire->getArticle() === $this) {
+                $commentaire->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getPictureFile(): ?File
+    {
+        return $this->pictureFile;
+    }
+
+    public function setPictureFile(?File $pictureFile = null): self
+    {
+        $this->pictureFile = $pictureFile;
 
         return $this;
     }
