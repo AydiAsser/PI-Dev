@@ -3,15 +3,15 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Enum\RoleEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 
 class UserType extends AbstractType
 {
@@ -42,7 +42,11 @@ class UserType extends AbstractType
             ->add('specialite', TextType::class, [
                 'attr' => ['class' => 'form-control mb-3'],
             ])
-            ->add('role', RoleEnum::class, [
+            ->add('role', ChoiceType::class, [
+                'choices' => [
+                    'Medecin' => 'medecin',
+                    'Patient' => 'patient',
+                ],
                 'attr' => ['class' => 'form-control mb-3'],
             ])
             ->add('Valider', SubmitType::class, [

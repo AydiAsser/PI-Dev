@@ -11,6 +11,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
+
+    public function getUserNameWithId(): string
+    {
+        return 'ID: '. $this->id . ' - ' . $this->firstName . ' '. $this->lastName;
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

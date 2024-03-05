@@ -74,7 +74,7 @@ class UserController extends AbstractController
                     $email->html('<h3>Bonjour ' . $form->get('Nom')->getData() . '</h3><p>
                     Vos cordoonnes sont : <br>
                     <p>Email : ' . $form->get('Email')->getData() . '</p>
-                    <p>Mot de passe : ' . $form->get('Mdp')->getData() . '</p> <br>
+                    <p>Mot de passe : ' . $form->get('Password')->getData() . '</p> <br>
                     </p><h4>Adminstrateur Healthguard </h4>');
 
 
@@ -116,7 +116,7 @@ class UserController extends AbstractController
                 $file->move('C:\Users\MSI\Desktop\PI-Dev\public\upload', $fileName);
 
                 $User->setImg("upload/" . $fileName);
-            } else if ($User1->getRate() == 'patient') {
+            } else if ($User1->getRole() == 'patient') {
                 $User->setFirstName($User1->getFirstName());
                 $User->setLastName($User1->getLastName());
                 $User->setEmail($User1->getEmail());
@@ -143,6 +143,38 @@ class UserController extends AbstractController
         return  $this->redirectToRoute("app_user");
     }
 
+
+    #[Route('/login', name: 'app_login')]
+
+    public function Login(ManagerRegistry  $doctrine, Request $request, UserRepository  $x, SessionInterface $session): Response
+    {
+        $User = new User();
+        $check_u = new User();
+        $form = $this->createForm(LoginType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $User = $form->getdata();
+
+            $check_u = $x->findByExampleField($User["email"]);
+            if ($form->isSubmitted()) {
+                $User = $form->getData();
+                $check_u = $x->findByExampleField($User["email"]);
+
+                if (isset($check_u[0])) {
+                    if ($User["email"] == $check_u[0]->getEmail() && $User["mdp"] == $check_u[0]->getPassword() && $check_u[0]->getEtat() == 1) {
+                        $session->set('my_key', $check_u[0]);
+                        return $this->redirectToRoute("app_user_logged");
+                    } else {
+                        $this->addFlash('error', 'Email ou mot de passe sont incorrect.'); // Add this line for the flash message
+                        return $this->render('user/login1.html.twig', ["form" => $form->createView()]);
+                    }
+                }
+            }
+        }
+        return $this->render('user/login1.html.twig', ["form" => $form->createView()]);
+    }
 
 
 
@@ -182,12 +214,11 @@ class UserController extends AbstractController
                     $this->addFlash('success', "Un email d'activation a été envoyé à votre adresse email. Veuillez vérifier votre boîte de réception pour activer votre compte");
                     return $this->redirectToRoute('app_log');
                 }
-
-                return $this->render('user/ajout.html.twig', [
-                    'form' => $form->createView(),
-                ]);
             }
         }
+        return $this->render('user/inscrciption_patient.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/inscriptionMedecin', name: 'app_Inscription_medecin')]
@@ -196,6 +227,7 @@ class UserController extends AbstractController
         $User = new User();
         $form = $this->createForm(UserType::class, $User);
         $form->remove("role");
+        $form->remove("rate");
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -228,12 +260,11 @@ class UserController extends AbstractController
                     $this->addFlash('success', "Un email d'activation a été envoyé à votre adresse email. Veuillez vérifier votre boîte de réception pour activer votre compte");
                     return $this->redirectToRoute('app_log');
                 }
-
-                return $this->render('user/ajout.html.twig', [
-                    'form' => $form->createView(),
-                ]);
             }
         }
+        return $this->render('user/inscription_medecin.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/Activation', name: 'app_Activation')]
@@ -246,6 +277,7 @@ class UserController extends AbstractController
         $em = $doctrine->getManager();
         $em->flush();
         return $this->redirectToRoute("app_user_logged");
+        
     }
 
 
@@ -257,11 +289,11 @@ class UserController extends AbstractController
         $myValue = $session->get('my_key')->getId();
         $u = $x->find($myValue);
         if ($u->getRole() == "medecin")
-            return $this->render('user/acceuil_medecin.html.twig', array("user" => $u));
+            return $this->render('home/index.html.twig', array("user" => $u));
         else if ($u->getRole() == "patient")
-            return $this->render('user/acceuil_patient.html.twig', array("user" => $u));
+            return $this->render('home/index.html.twig', array("user" => $u));
         else if ($u->getRole() == "Admin")
-            return $this->render('user/acceuil_admin.html.twig', array("user" => $u));
+            return $this->redirectToRoute("app_user");
     }
 
 
@@ -272,18 +304,15 @@ class UserController extends AbstractController
         $u = $x->find($myValue);
         $User = new User();
         $User = $x->find($u->getId());
-        $form = $this->createForm(ProfileType::class, $User);
-
+        $form = $this->createForm(UserType::class, $User);
+        $form->remove("role");
+        $form->remove("rate");
         $form->handleRequest($request);
 
         $u = $x->find($myValue);
 
 
         // $form->get('nom')->setdata($User->getNom());
-
-
-
-
 
         if ($u->getRole() == "medecin") {
             if ($form->isSubmitted() && $form->isValid()) {
@@ -307,6 +336,8 @@ class UserController extends AbstractController
             }
             return $this->render('user/profile_medecin.html.twig', array("user" => $u, "form" => $form->createView()));
         } else if ($u->getRole() == "patient") {
+            $form->remove("specialite");
+
             if ($form->isSubmitted() && $form->isValid()) {
                 $User1 = $form->getdata();
                 $User->setFirstName($User1->getFirstName());

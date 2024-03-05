@@ -51,7 +51,7 @@
               <span class="hide-menu">Management</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+              <a class="sidebar-link" href="{{path('app_user')}}" aria-expanded="false">
                 <span>
                   <i class="ti ti-user"></i>
                 </span>
@@ -182,10 +182,9 @@
             {# <p class="mb-0">This is a sample page </p> #}
 
               {{ include('article/admin/admin_form.html.twig', {'button_label': 'Update'}) }}
+    <a href="{{ path('app_article_admin_index') }}" class="btn btn-secondary">back to list</a>
+            <div style="margin-top:10px;">{{ include('article/admin/admin_delete_form.html.twig') }}</div>
 
-    <a href="{{ path('app_article_admin_index') }}">back to list</a>
-
-    {{ include('article/admin/admin_delete_form.html.twig') }}
 
           </div>
         </div>

@@ -19,12 +19,13 @@ class CommentaireType extends AbstractType
             // ->add('created_at')
             ->add('article', EntityType::class, [
                 'class' => Article::class,
-                'choice_label' => 'id',
+                'choice_label' => 'articleTitleWithId', // Use the custom method
             ])
-            ->add('commenter', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ]);;
+            // ->add('commenter', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'userNameWithId', // Use the custom method
+            // ]);
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

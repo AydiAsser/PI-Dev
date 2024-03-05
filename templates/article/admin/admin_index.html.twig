@@ -51,7 +51,7 @@
               <span class="hide-menu">Management</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+              <a class="sidebar-link" href="{{path('app_user')}}" aria-expanded="false">
                 <span>
                   <i class="ti ti-user"></i>
                 </span>
@@ -220,8 +220,8 @@
 
 
             {# <h5 class="card-title fw-semibold mb-4">Recent Articles</h5> #}
-            <div class="table-responsive">
-                <table class="table text-nowrap mb-0 align-middle">
+            <div class="table-responsive ">
+                <table class="table table-bordered  table-hover  text-nowrap mb-0 align-middle">
                     <thead class="text-dark fs-4">
                         <tr>
                             <th class="border-bottom-0">
@@ -275,6 +275,8 @@
                                 <div class="d-flex gap-2">
                                     <a href="{{ path('app_article_admin_show', {'id': article.id}) }}" class="btn btn-primary">Show</a>
                                     <a href="{{ path('app_article_admin_edit', {'id': article.id}) }}" class="btn btn-secondary">Edit</a>
+                                    {{ include('article/admin/admin_delete_form.html.twig') }}
+
                                 </div>
                             </td>
                         </tr>

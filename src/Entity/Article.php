@@ -9,11 +9,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use App\Validator\Constraints as CustomAssert;
 
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
+
+    public function getArticleTitleWithId(): string
+    {
+        return 'ID: '. $this->id . ' - ' . $this->title;
+    }
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

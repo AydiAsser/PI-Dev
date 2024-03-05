@@ -51,7 +51,7 @@
               <span class="hide-menu">Management</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+              <a class="sidebar-link" href="{{path('app_user')}}" aria-expanded="false">
                 <span>
                   <i class="ti ti-user"></i>
                 </span>
@@ -183,7 +183,7 @@
 
             <div class="card">
     <div class="card-body">
-        <table class="table">
+        <table class="table  table-bordered  table-hover ">
             <tbody>
                 <tr>
                     <th scope="row">Id</th>
@@ -192,6 +192,11 @@
                 <tr>
                     <th scope="row">Author</th>
                     <td> {{ article.author.getFirstName() }} {{ article.author.getLastName() }}</td>
+                </tr>
+                <tr>
+                <tr>
+                    <th scope="row">Author Id</th>
+                    <td> {{ article.author.getId() }}</td>
                 </tr>
                 <tr>
                     <th scope="row">Title</th>
@@ -217,7 +222,7 @@
         </table>
         <a href="{{ path('app_article_admin_index') }}" class="btn btn-secondary">Back to List</a>
         <a href="{{ path('app_article_admin_edit', {'id': article.id}) }}" class="btn btn-primary">Edit</a>
-        {{ include('article/admin/admin_delete_form.html.twig') }}
+        <div style="margin-top:10px;">{{ include('article/admin/admin_delete_form.html.twig') }}</div>
     </div>
 </div>
 
@@ -229,8 +234,8 @@
     <div class="card w-100">
         <div class="card-body p-4">
             {# <h5 class="card-title fw-semibold mb-4">Recent Commen</h5> #}
-            <div class="table-responsive">
-                <table class="table text-nowrap mb-0 align-middle">
+            <div class="table-responsive ">
+                <table class=" table-bordered  table-hover table text-nowrap mb-0 align-middle">
                     <thead class="text-dark fs-4">
                         <tr>
                             <th class="border-bottom-0">

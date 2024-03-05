@@ -51,7 +51,7 @@
               <span class="hide-menu">Management</span>
             </li>
             <li class="sidebar-item">
-              <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+              <a class="sidebar-link" href="{{path('app_user')}}" aria-expanded="false">
                 <span>
                   <i class="ti ti-user"></i>
                 </span>
@@ -181,11 +181,11 @@
             <h5 class="card-title fw-semibold mb-4">Edit Comment</h5>
             {# <p class="mb-0">This is a sample page </p> #}
 
-              {{ include('commentaire/admin_form.html.twig', {'button_label': 'Update'}) }}
+              {{ include('commentaire/admin/admin_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="https://127.0.0.1:8000/article/admin/">back to list</a>
+            <a href="{{ path('app_article_admin_show', {'id': commentaire.article.id}) }}"  class="btn btn-secondary">back to list</a>
 
-    {{ include('commentaire/admin/admin/admin_delete_form.html.twig') }}
+    {{ include('commentaire/admin/admin_delete_form.html.twig') }}
 
           </div>
         </div>

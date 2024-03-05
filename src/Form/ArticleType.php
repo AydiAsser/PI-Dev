@@ -24,10 +24,10 @@ class ArticleType extends AbstractType
                 'required' => false, // depending on your validation rules
                 'attr' => ['rows' => 10], // adjust rows as per your preference
             ])
-            ->add('author', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('author', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'userNameWithId',
+            // ])
             ->add('pictureFile', VichFileType::class, [
                 'required' => false,
                 'allow_delete' => false,

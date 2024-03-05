@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Article;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
@@ -14,8 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\CommentaireRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Mime\MimeTypes;
@@ -23,65 +22,82 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use MYPDF;
 use TCPDF;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
 
-
-
-
     #[Route('/like/{idArticle}', name: 'app_article_like', methods: ['POST'])]
-    public function likeArticle($idArticle, Request $request, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
+    public function likeArticle(SessionInterface $session, UserRepository $repository, $idArticle, Request $request, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
     {
-        $article = $articleRepository->find($idArticle);
-
-        if (!$article) {
-            return new Response('Article not found', Response::HTTP_NOT_FOUND);
+        try {
+            $article = $articleRepository->find($idArticle);
+    
+            $myValue = $session->get('my_key');
+            if (!$myValue) {
+                throw new \Exception('Session key not found.');
+            }
+    
+            $u = $repository->find($myValue->getId());
+            if (!$u) {
+                throw new \Exception('User not found.');
+            }
+    
+            if (!$article) {
+                throw new \Exception('Article not found.');
+            }
+    
+            $userID = $u->getId();
+    
+            // Get the list of likes
+            $likesList = $article->getLikesList() ?? [];
+    
+            if (in_array($userID, $likesList)) {
+                $likesList = array_diff($likesList, array($userID));
+                $article->setLikesList($likesList);
+                $article->setNbLikes($article->getNbLikes() - 1);
+            } else {
+                $likesList[] = $userID;
+                $article->setLikesList($likesList);
+                $article->setNbLikes($article->getNbLikes() + 1);
+            }
+    
+            $entityManager->flush();
+    
+            // Return the updated like count as JSON response
+            $response = [
+                'likes' => $article->getNbLikes(),
+                'user' => $u
+            ];
+    
+            return $this->json($response);
+        } catch (\Exception $e) {
+            return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        // Get the list of likes
-        $likesList = $article->getLikesList();
-
-        // Ensure $likesList is initialized as an array
-        $likesList = $likesList ?? [];
-
-        // Get the client IP address
-        $clientIP = $request->getClientIp();
-
-        if (in_array($clientIP, $likesList)) {
-            $likesList = array_diff($likesList, array($clientIP));
-            $article->setLikesList($likesList);
-            $article->setNbLikes($article->getNbLikes() - 1);
-        } else {
-            $likesList[] = $clientIP;
-            $article->setLikesList($likesList);
-            $article->setNbLikes($article->getNbLikes() + 1);
-        }
-
-        $entityManager->flush();
-
-        // Return the updated like count as JSON response
-        $response = [
-            'likes' => $article->getNbLikes()
-        ];
-
-        return $this->json($response);
     }
-
+    
 
     #[Route('/admin', name: 'app_article_admin_index', methods: ['GET'])]
-    public function admin_index(ArticleRepository $articleRepository): Response
+    public function admin_index(SessionInterface $session, UserRepository $repository,ArticleRepository $articleRepository): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         return $this->render('article/admin/admin_index.html.twig', [
             'articles' => $articleRepository->findAll(),
+            'user' => $u
         ]);
     }
 
 
     #[Route('/admin/new', name: 'app_article_admin_new', methods: ['GET', 'POST'])]
-    public function admin_new(Request $request, EntityManagerInterface $entityManager): Response
+    public function admin_new(SessionInterface $session, UserRepository $repository,Request $request, EntityManagerInterface $entityManager): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
@@ -117,19 +133,24 @@ class ArticleController extends AbstractController
         return $this->renderForm('article/admin/admin_new.html.twig', [
             'article' => $article,
             'form' => $form,
+            'user'=> $u,
         ]);
     }
 
 
     #[Route('/admin/{id}', name: 'app_article_admin_show', methods: ['GET'])]
-    public function admin_show(CommentaireRepository $commentaireRepository, Article $article): Response
+    public function admin_show(SessionInterface $session, UserRepository $repository,CommentaireRepository $commentaireRepository, Article $article): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         $articleId = $article->getId();
         $commentaires = $commentaireRepository->findByArticleId($articleId);
 
         return $this->render('article/admin/admin_show.html.twig', [
             'article' => $article,
             'commentaires' => $commentaires,
+            'user'=> $u,
         ]);
     }
 
@@ -137,8 +158,11 @@ class ArticleController extends AbstractController
 
 
     #[Route('/admin/{id}/edit', name: 'app_article_admin_edit', methods: ['GET', 'POST'])]
-    public function admin_edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+    public function admin_edit(SessionInterface $session, UserRepository $repository,Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
@@ -167,12 +191,16 @@ class ArticleController extends AbstractController
         return $this->renderForm('article/admin/admin_edit.html.twig', [
             'article' => $article,
             'form' => $form,
+            'user' => $u,
         ]);
     }
 
     #[Route('/admin/{id}', name: 'app_article_admin_delete', methods: ['POST'])]
-    public function admin_delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+    public function admin_delete(SessionInterface $session, UserRepository $repository,Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
             $commentRepository = $entityManager->getRepository(Commentaire::class);
 
@@ -198,8 +226,11 @@ class ArticleController extends AbstractController
 
 
     #[Route('/', name: 'app_article_index', methods: ['GET'])]
-    public function index(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(SessionInterface $session, UserRepository $repository,ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         // Retrieve the filter parameters from the request
         $authorName = $request->query->get('authorName', '');
         $title = $request->query->get('title', '');
@@ -232,14 +263,18 @@ class ArticleController extends AbstractController
             'authorName' => $authorName,
             'title' => $title,
             'sortBy' => $sortBy,
+            'user' =>$u,
         ]);
     }
     
 
 
     #[Route('/api', name: 'app_article_api', methods: ['GET'])]
-    public function indexx(Request $request,PaginatorInterface $paginator): Response
+    public function index_api(SessionInterface $session, UserRepository $repository,Request $request,PaginatorInterface $paginator): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         // Fetch articles from the API endpoint
         $client = HttpClient::create();
         $response = $client->request('GET', 'https://health.gov/myhealthfinder/api/v3/topicsearch.json?lang=en');
@@ -257,13 +292,19 @@ class ArticleController extends AbstractController
 
         return $this->render('article/articles.html.twig', [
             'pagination' => $pagination,
+            'user'=>$u,
         ]);
     }
     
 
+
     #[Route('/api/{id}', name: 'app_article_show_api', methods: ['GET'])]
-public function showw($id, Request $request): Response
+public function show_api(SessionInterface $session, UserRepository $repository,$id, Request $request): Response
 {
+
+    $myValue = $session->get('my_key')->getId();
+    $u=$repository->find($myValue);
+
     // Fetch article details from the API endpoint based on the provided ID
     $client = HttpClient::create();
     $response = $client->request('GET', 'https://health.gov/myhealthfinder/api/v3/topicsearch.json?lang=en');
@@ -289,6 +330,7 @@ public function showw($id, Request $request): Response
     // Pass the article details to the template
     return $this->render('article/articleDetailApi.html.twig', [
         'article' => $article,
+        'user'=> $u,
     ]);
 }
 
@@ -296,8 +338,11 @@ public function showw($id, Request $request): Response
 
 
     #[Route('/sort', name: 'app_article_sort', methods: ['GET'])]
-    public function sort(ArticleRepository $articleRepository, Request $request): JsonResponse
+    public function sort(SessionInterface $session, UserRepository $repository,ArticleRepository $articleRepository, Request $request): JsonResponse
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         try {
             $sortBy = $request->query->get('sortBy', 'recent');
 
@@ -355,8 +400,10 @@ public function showw($id, Request $request): Response
 
 
     #[Route('/fetch-articles', name: 'fetch_articles', methods: ['GET'])]
-    public function fetchArticles(ArticleRepository $articleRepository): JsonResponse
+    public function fetchArticles(SessionInterface $session, UserRepository $repository,ArticleRepository $articleRepository): JsonResponse
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
         // Fetch articles from the repository
         $articles = $articleRepository->findAll();
 
@@ -384,12 +431,17 @@ public function showw($id, Request $request): Response
     }
 
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(SessionInterface $session, UserRepository $repository,Request $request, EntityManagerInterface $entityManager): Response
     {
+        
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+        $userID=$u->getId();
+    
         if ($form->isSubmitted() && $form->isValid()) {
             // Handle picture file upload
             $pictureFile = $form->get('pictureFile')->getData();
@@ -412,6 +464,7 @@ public function showw($id, Request $request): Response
                 $article->setPicture($newFilename);
             }
 
+            $article->setAuthor($u);
             $entityManager->persist($article);
             $entityManager->flush();
 
@@ -421,13 +474,17 @@ public function showw($id, Request $request): Response
         return $this->renderForm('article/new.html.twig', [
             'article' => $article,
             'form' => $form,
+            'user' => $u
         ]);
     }
 
 
     #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
-    public function show(Request $request, Article $article): Response
+    public function show(SessionInterface $session, UserRepository $repository,Request $request, Article $article): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         // Create an instance of the form for editing comments
         $commentaire = new Commentaire(); // Assuming Commentaire is your comment entity
         $editForm = $this->createForm(CommentaireType::class, $commentaire);
@@ -447,13 +504,17 @@ public function showw($id, Request $request): Response
         return $this->render('article/show.html.twig', [
             'article' => $article,
             'editForm' => $editForm->createView(),
+            'user'=> $u,
         ]);
     }
 
 
     #[Route('/{id}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+    public function edit(SessionInterface $session, UserRepository $repository,Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
@@ -481,12 +542,16 @@ public function showw($id, Request $request): Response
         return $this->render('article/edit.html.twig', [
             'article' => $article,
             'form' => $form->createView(),
+            'user'=>$u
         ]);
     }
 
     #[Route('/delete/{id}', name: 'app_article_delete', methods: ['POST'])]
-    public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
+    public function delete(SessionInterface $session, UserRepository $repository,Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        $myValue = $session->get('my_key')->getId();
+        $u=$repository->find($myValue);
+
         // if ($this->isCsrfTokenValid('delete' . $article->getId(), $request->request->get('_token'))) {
             $commentRepository = $entityManager->getRepository(Commentaire::class);
 
@@ -607,18 +672,20 @@ public function showw($id, Request $request): Response
             $pdf->SetTextColor(33, 37, 41); // Text color: #212529
             $pdf->SetFillColor(240, 240, 240); // Content background color: #f9f9ff
 
+
             $pdf->SetFont('helvetica', '', 10);
             $pdf->setCellHeightRatio(1.5);
             // $pdf->setCellPaddings(8, 10, 8, 10);
             $pdf->MultiCell(0, 0, '', 0, 'L', false, 1, 125, 160, true, 0, false, true, 0, 'T', false);
-
+            
             // Set the starting position for the content
             if ($picPath == null) {
                 $startYContent = $imageHeight + 20; // Add additional padding
             } else {
                 $startYContent = $imageHeight + 10; // Add additional padding
             }
-
+            
+      
             $pdf->SetY($startYContent); // Set Y position for content
             $pdf->MultiCell(0, 10, $content, 0, 'L', true); // Content with background color
             // Add some additional space after the content
@@ -631,9 +698,9 @@ public function showw($id, Request $request): Response
             $pdf->SetTextColor(50, 50, 50); // Dark gray text color
 
             // Define icons using Unicode characters
-            $authorIcon = "\xE2\x9C\x92"; // Unicode character for a check mark icon
-            $likesIcon = "\xE2\x98\x85"; // Unicode character for a star icon
-            $commentsIcon = "\xE2\x9C\x8F"; // Unicode character for a pencil icon
+            // $authorIcon = "\xE2\x9C\x92"; // Unicode character for a check mark icon
+            // $likesIcon = "\xE2\x98\x85"; // Unicode character for a star icon
+            // $commentsIcon = "\xE2\x9C\x8F"; // Unicode character for a pencil icon
             // Concatenate author's first and last name
             $authorName = $article->getAuthor()->getFirstName() . " " . $article->getAuthor()->getLastName();
             $authorId = $article->getAuthor()->getId();
@@ -646,7 +713,7 @@ public function showw($id, Request $request): Response
             $nbComments = $article->getNbComments();
 
             // Construct the string with icons and attributes
-            $details = $authorIcon . " " . $authorName . "  | Id: " . $authorId . "  |  " . $createdAt . "  |  " . $likesIcon . " " . $nbLikes . " Likes  |  " . $commentsIcon . " " . $nbComments . " Comments";
+            $details = "Author: " . $authorName . "  | Id: " . $authorId . "  |  " . $createdAt . "  | " . $nbLikes . " Likes  |  " . $nbComments . " Comments";
 
             // Output the details
             $pdf->Cell(0, 10, $details, 0, 1, 'L');
@@ -829,10 +896,10 @@ public function showw($id, Request $request): Response
         $pdf->SetFont('times', '', 12);
         $pdf->SetTextColor(50, 50, 50); // Dark gray text color
 
-        // Define icons using Unicode characters
-        $authorIcon = "\xE2\x9C\x92"; // Unicode character for a check mark icon
-        $likesIcon = "\xE2\x98\x85"; // Unicode character for a star icon
-        $commentsIcon = "\xE2\x9C\x8F"; // Unicode character for a pencil icon
+        // // Define icons using Unicode characters
+        // $authorIcon = "\xE2\x9C\x92"; // Unicode character for a check mark icon
+        // $likesIcon = "\xE2\x98\x85"; // Unicode character for a star icon
+        // $commentsIcon = "\xE2\x9C\x8F"; // Unicode character for a pencil icon
         // Concatenate author's first and last name
         $authorName = $article->getAuthor()->getFirstName() . " " . $article->getAuthor()->getLastName();
 
@@ -844,10 +911,10 @@ public function showw($id, Request $request): Response
         $nbComments = $article->getNbComments();
 
         // Construct the string with icons and attributes
-        $details = $authorIcon . " " . $authorName . "  |  " . $createdAt . "  |  " . $likesIcon . " " . $nbLikes . " Likes  |  " . $commentsIcon . " " . $nbComments . " Comments";
+        $details = "Author:  " . $authorName . "  |  " . $createdAt . "  | " . $nbLikes . " Likes  |  " . $nbComments . " Comments";
 
         // Output the details
-        $pdf->Cell(0, 5, $details, 0, 1, 'L');
+        // $pdf->Cell(0, 5, $details, 0, 1, 'L');
 
         $pdf->AddPage();
 

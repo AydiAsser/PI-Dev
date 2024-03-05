@@ -16,3 +16,4 @@ app_comment_delete:
     path: /commentaire/{id}
     controller: App\Controller\CommentaireController::delete
     methods: ['POST']
+
