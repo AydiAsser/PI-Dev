@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Medications index{% endblock %}
+
+{% block body %}
+    <h1>Medications index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantite</th>
+                <th>Prix</th>
+                <th>Name</th>
+                <th>Disponibilite</th>
+                <th>Instruction_usage</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for medication in medications %}
+            <tr>
+                <td>{{ medication.id }}</td>
+                <td>{{ medication.quantite }}</td>
+                <td>{{ medication.prix }}</td>
+                <td>{{ medication.name }}</td>
+                <td>{{ medication.disponibilite ? 'Yes' : 'No' }}</td>
+                <td>{{ medication.instructionUsage }}</td>
+                <td>
+                    <a href="{{ path('app_medications_show', {'id': medication.id}) }}">show</a>
+                    <a href="{{ path('app_medications_edit', {'id': medication.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_medications_new') }}">Creatte new</a>
+{% endblock %}

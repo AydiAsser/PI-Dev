@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Prescri index{% endblock %}
+
+{% block body %}
+    <h1>Prescri index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantite</th>
+                <th>Date_debut</th>
+                <th>Date_fin</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for prescri in prescris %}
+            <tr>
+                <td>{{ prescri.id }}</td>
+                <td>{{ prescri.quantite }}</td>
+                <td>{{ prescri.dateDebut ? prescri.dateDebut|date('Y-m-d') : '' }}</td>
+                <td>{{ prescri.dateFin ? prescri.dateFin|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_prescri_show', {'id': prescri.id}) }}">show</a>
+                    <a href="{{ path('app_prescri_edit', {'id': prescri.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_prescri_new') }}">Create new</a>
+{% endblock %}

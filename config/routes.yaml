@@ -1,3 +1,10 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+searchmedi:
+    path: /medicament/search
+    controller: App\Controller\MedicamentController::searchmedi
+   
+app_add_to_cart:
+    path: '/add-to-cart/{id}'
+    controller: 'App\Controller\PanierController::addToCart'

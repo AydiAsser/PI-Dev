@@ -1,0 +1,43 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Rendezvouss{% endblock %}
+
+{% block body %}
+
+ <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>Rendez vous</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1>Rendezvouss</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ rendezvouss.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ rendezvouss.date ? rendezvouss.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Raison</th>
+                <td>{{ rendezvouss.raison }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_rendezvouss_index') }}">back to list</a>
+
+    <a href="{{ path('app_rendezvouss_edit', {'id': rendezvouss.id}) }}">edit</a>
+
+    {{ include('rendezvouss/_delete_form.html.twig') }}
+{% endblock %}

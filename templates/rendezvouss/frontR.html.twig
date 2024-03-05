@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+  <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>afficher mes  rendez vous</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+ 
+
+ <h3>table de mes rendez vous</h3>
+ <br>
+ 
+
+ <table class="table">
+        <tbody>
+         
+          {% for r in rendezvouss %}
+         
+            <tr>
+                <th>Id</th>
+                <td>{{ r.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ r.date ? r.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Raison</th>
+                <td>{{ r.raison }}</td>
+            </tr>
+             <tr>
+               <th>medecin</th>
+                <td>{{ r.medecins }}</td>
+            </tr>
+             <tr>
+                <td></td>
+                <td></td>
+            </tr>
+
+
+
+               {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+
+
+
+<br>
+
+
+
+
+ 
+
+
+
+
+ <!-- form itself end-->
+    <form id="test-form" class="white-popup-block mfp-hide">
+        <div class="popup_box ">
+            <div class="popup_inner" href="./index.html">
+              
+              
+              
+                <h3>
+    <a href="http://127.0.0.1:8000/rendezvouss/reserver">Book an <span>Appointment</span></a>
+</h3>
+               
+            </div>
+        </div>
+    </form>
+    <!-- form itself end -->
+
+
+
+
+  {% endblock %}

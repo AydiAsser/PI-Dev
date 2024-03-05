@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Ajoutez des liens vers vos feuilles de style spécifiques si nécessaire -->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Ajoutez des liens vers vos scripts JavaScript spécifiques si nécessaire -->
+{% endblock %}
+
+{% block body %}
+
+ <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>Statistique meilleur medecin</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- form itself end-->
+    <form id="test-form" class="white-popup-block mfp-hide">
+        <div class="popup_box ">
+            <div class="popup_inner" href="./index.html">
+              
+              
+              
+                <h3>
+    <a href="http://127.0.0.1:8000/calendar/new">Book an <span>Appointment</span></a>
+</h3>
+               
+            </div>
+        </div>
+    </form>
+    <!-- form itself end -->
+
+
+
+
+
+
+
+<div class="container">
+    <center> <h1>Statistiques</h1> </center>
+    <canvas id="transport_reservation" width="400" height="100"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('transport_reservation');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [{
+                label: '# of Votes',
+                data: {{ transpIdCount|raw }},
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

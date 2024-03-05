@@ -1,0 +1,270 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+  <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>medicaments</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+ 
+
+ <h3>table de mes rendez vous</h3>
+ <br>
+ 
+
+ 
+
+
+
+ <div class="depertment_area">
+        <div class="container">
+            <div class="row custom_align align-items-end justify-content-between">
+                <div class="col-lg-6">
+                    <div class="section_title">
+                        <h3>Departments</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="learn_more_btn text-right">
+                        <a href="#" class="boxed-btn">Learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="depart_ment_tab mb-30">
+                        <ul class="nav" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                                    <i class="flaticon-teeth"></i>
+                                    <h4>Dentistry</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                                    <i class="flaticon-cardiovascular"></i>
+                                    <h4>Cardiology</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">
+                                    <i class="flaticon-ear"></i>
+                                    <h4>ENT Specialists</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="Astrology-tab" data-toggle="tab" href="#Astrology" role="tab" aria-controls="contact" aria-selected="false">
+                                    <i class="flaticon-bone"></i>
+                                    <h4>Astrology</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="Neuroanatomy-tab" data-toggle="tab" href="#Neuroanatomy" role="tab" aria-controls="contact" aria-selected="false">
+                                    <i class="flaticon-lung"></i>
+                                    <h4>Neuroanatomy</h4>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="Blood-tab" data-toggle="tab" href="#Blood" role="tab" aria-controls="contact" aria-selected="false">
+                                    <i class="flaticon-cell"></i>
+                                    <h4>Blood Screening</h4>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+ 
+<style>
+        .medication-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .medication-block {
+            width: 23%; /* Ajustez la largeur en fonction de vos besoins */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="medication-container">
+    <div class="medication-block">
+        <h2>Nom du médicament 1</h2>
+        <img src="chemin/vers/image1.jpg" alt="Image du médicament 1">
+        <p>Description du médicament 1 et informations supplémentaires.</p>
+    </div>
+
+    <div class="medication-block">
+        <h2>Nom du médicament 2</h2>
+        <img src="chemin/vers/image2.jpg" alt="Image du médicament 2">
+        <p>Description du médicament 2 et informations supplémentaires.</p>
+    </div>
+
+    <!-- Ajoutez d'autres blocs de médicaments ici -->
+
+</div>
+
+
+
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="explore" class="explore">
+    <div class="container">
+        <div class="section-header">
+            <h2>transport</h2>
+            <p>choose your way of transport</p>
+        </div><!--/.section-header-->
+        <div class="explore-content">
+            <div class="row">
+                
+                <div class=" col-md-4 col-sm-6">
+                    <div class="single-explore-item">
+                        <div class="single-explore-img">
+                        
+                            <div class="single-explore-img-info">
+                                <button onclick="window.location.href='#'">best rated</button>
+                                <div class="single-explore-image-icon-box">
+                                    <ul>
+                                        <li>
+                                            <div class="single-explore-image-icon">
+                                                <i class="fa fa-arrows-alt"></i>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="single-explore-image-icon">
+                                                <i class="fa fa-bookmark-o"></i>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="single-explore-txt bg-theme-1">
+                            
+                            <p class="explore-rating-price">
+                                <span class="explore-rating">5.0</span>
+                                <a href="#"> 10 ratings</a>
+                                <span class="explore-price-box">
+											form
+											<span class="explore-price"></span>$
+										</span>
+                                <a href="#">Car</a>
+                            </p>
+                            <div class="explore-person">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="explore-person-img">
+                                            <a href="#">
+                                                <img src="{{ asset('assets/images/explore/c4.png')}}" alt="explore person">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-10">
+                                        <p>
+                                            
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="explore-open-close-part">
+                                <div class="row">
+                                    <div class="col-sm-5">     
+                                     <button class="close-btn open-btn" onclick=""></button>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="explore-map-icon">
+                                            <a href="#"><i data-feather="map-pin"></i></a>
+                                            <a href="#"><i data-feather="upload"></i></a>
+                                            <a href="#"><i data-feather="heart"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+      
+
+             
+            </div>
+        </div>
+    </div><!--/.container-->
+    
+
+</section><!--/.explore-->
+<!--explore end -->
+
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+ <!-- form itself end-->
+    <form id="test-form" class="white-popup-block mfp-hide">
+        <div class="popup_box ">
+            <div class="popup_inner" href="./index.html">
+              
+              
+              
+                <h3>
+    <a href="http://127.0.0.1:8000/rendezvouss/reserver">Book an <span>Appointment</span></a>
+</h3>
+               
+            </div>
+        </div>
+    </form>
+    <!-- form itself end -->
+
+
+
+
+  {% endblock %}

@@ -45,4 +45,27 @@ class AuthorRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+
+
+
+public function selectA($id)
+{
+
+$list=$this->createQueryBuilder('s') 
+   
+    ->where('s.id=:id')
+       ->getQuery()
+       ->getResult();
+
+       return $list;
+
+
+}
+
+
+
+
+
 }

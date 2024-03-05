@@ -1,0 +1,178 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+  <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>Planning medecin</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+ 
+
+ 
+ <br>
+ 
+
+ 
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation de rendez-vous</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .available {
+            background-color: #aaffaa;
+        }
+
+        .reserved {
+            background-color: #ffaaaa;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Calendrier de réservation</h2>
+
+<table>
+   
+   
+   
+    <tr>
+       <th>Nom Medecin</th>
+        <th>disponibilité</th>
+       
+        
+        
+    </tr>
+    
+    {% for planning_medecin in p %}
+    
+                   
+          
+    <tr>
+         <td>{{ planning_medecin.User }}</td>
+       
+          
+
+
+           {% if planning_medecin.disponibilite == 1 %}
+        
+        
+        
+           <td class="available"><a href="http://127.0.0.1:8000/calendar/new">Disponible</a></td>
+    
+           {% else %}
+        
+        
+             <td class="reserved">Réservé</td>
+   
+         {% endif %} 
+   
+   
+    </tr>
+    
+                
+
+
+              
+     {% endfor %} 
+    <!-- Ajoutez d'autres lignes pour les autres jours -->
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+ 
+
+
+
+
+ <!-- form itself end-->
+    <form id="test-form" class="white-popup-block mfp-hide">
+        <div class="popup_box ">
+            <div class="popup_inner" href="./index.html">
+              
+              
+              
+                <h3>
+    <a href="http://127.0.0.1:8000/calendar/new">Book an <span>Appointment</span></a>
+</h3>
+               
+            </div>
+        </div>
+    </form>
+    <!-- form itself end -->
+
+
+
+
+  {% endblock %}

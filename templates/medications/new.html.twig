@@ -1,0 +1,10 @@
+
+{% block title %}New Medications{% endblock %}
+
+{% block body %}
+    <h1>Create new Medications</h1>
+
+    {{ include('medications/_form.html.twig') }}
+
+    <a href="{{ path('app_medications_index') }}">back to list</a>
+{% endblock %}

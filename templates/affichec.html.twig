@@ -1,0 +1,28 @@
+<html>
+<head>
+
+
+</head>
+<body>
+<table>
+     <tr>
+         <td>ref</td>
+         <td>description</td>
+         
+     </tr>
+      {% for Author in authors %}
+        <tr>
+         <td> {{Author.ref}} </td>
+         <td> {{Author.marque}} </td>
+       
+
+         <td>
+            <a href="{{path('deletec',{'id':Author.id})}}"> delete </a>
+             <a href="{{path('updatec',{'id':Author.id})}}"> Update </a>
+           
+         </td>
+        </tr>
+      {% endfor %}
+</table>
+
+<a href="{{path('addCC')}}"> create new:  </a>
