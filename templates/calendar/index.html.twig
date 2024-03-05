@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar index{% endblock %}
+
+{% block body %}
+
+
+ <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>Rendez vous</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- form itself end-->
+    <form id="test-form" class="white-popup-block mfp-hide">
+        <div class="popup_box ">
+            <div class="popup_inner" href="./index.html">
+              
+              
+              
+                <h3>
+    <a href="http://127.0.0.1:8000/calendar/new">Book an <span>Appointment</span></a>
+</h3>
+               
+            </div>
+        </div>
+    </form>
+    <!-- form itself end -->
+
+
+    <h1>Table des rendez vous</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>medecin</th>
+                <th>Title</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Description</th>
+                <th>All_day</th>
+                <th>Backgroung_color</th>
+                <th>Border_color</th>
+                <th>Text_color</th>
+         
+              
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for calendar in calendars %}
+            <tr>
+                <td>{{ calendar.getUser() }}</td>
+                <td>{{ calendar.title }}</td>
+                <td>{{ calendar.start ? calendar.start|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ calendar.end ? calendar.end|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ calendar.description }}</td>
+                <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
+                <td>{{ calendar.backgroungColor }}</td>
+                <td>{{ calendar.borderColor }}</td>
+                <td>{{ calendar.textColor }}</td>
+          
+             
+                <td>
+                    <a href="{{ path('app_calendar_show', {'id': calendar.id}) }}">show</a>
+                    <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<div style="text-align: center;">
+    <form action="{{ path('cal') }}" method="get" class="search-form">
+    <input type="text" name="search_query" placeholder="Search title or description">
+    <button type="submit" class="btn-link">Search</button>
+    </form>
+    </div>
+
+
+    <a href="{{ path('app_calendar_new') }}">Create new</a>
+{% endblock %}

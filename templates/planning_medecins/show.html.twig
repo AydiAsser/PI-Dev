@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block title %}PlanningMedecins{% endblock %}
+
+{% block body %}
+    
+    <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>prescription</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    <h1>PlanningMedecins</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ planning_medecin.id }}</td>
+            </tr>
+            <tr>
+                <th>Jour_debut</th>
+                <td>{{ planning_medecin.jourDebut }}</td>
+            </tr>
+            <tr>
+                <th>Jour_fin</th>
+                <td>{{ planning_medecin.jourFin }}</td>
+            </tr>
+            <tr>
+                <th>Heure_debut</th>
+                <td>{{ planning_medecin.heureDebut ? planning_medecin.heureDebut|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Heure_fin</th>
+                <td>{{ planning_medecin.heureFin ? planning_medecin.heureFin|date('H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Disponibilite</th>
+                <td>{{ planning_medecin.disponibilite ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_planning_medecins_index') }}">back to list</a>
+
+    <a href="{{ path('app_planning_medecins_edit', {'id': planning_medecin.id}) }}">edit</a>
+
+    {{ include('planning_medecins/_delete_form.html.twig') }}
+{% endblock %}

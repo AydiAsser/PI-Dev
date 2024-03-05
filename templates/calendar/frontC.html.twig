@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+  <!-- Header Start -->
+  <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>rendez voust</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+  
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+   
+
+
+
+
+
+ <!-- expert_doctors_area_end -->
+
+    <div class="book_apointment_area">
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-lg-7">
+                    <div class="popup_box ">
+                        <div class="popup_inner">
+                            <a href="http://127.0.0.1:8000/c"> <span>voir planning medecin</span></a>
+                            <br>
+                            <h3>
+                                Book an 
+                            <span>Appointment</span>
+                            </h3>
+                            
+                  {{ include('calendar/_form.html.twig') }}
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+
+
+
+
+
+ <!-- form itself end-->
+    <form id="test-form" class="white-popup-block mfp-hide">
+        <div class="popup_box ">
+            <div class="popup_inner" href="./index.html">
+              
+              
+              
+                <h3>
+    <a href="http://127.0.0.1:8000/calendar/new">Book an <span>Appointment</span></a>
+</h3>
+               
+            </div>
+        </div>
+    </form>
+    <!-- form itself end -->
+
+
+
+
+  {% endblock %}

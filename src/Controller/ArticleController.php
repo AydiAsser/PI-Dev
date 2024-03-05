@@ -23,16 +23,25 @@ use Symfony\Component\HttpClient\HttpClient;
 use MYPDF;
 use TCPDF;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
+use App\Form\LikeType;
+use App\Service\LikeService;
 
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
 
     #[Route('/like/{idArticle}', name: 'app_article_like', methods: ['POST'])]
-    public function likeArticle(SessionInterface $session, UserRepository $repository, $idArticle, Request $request, EntityManagerInterface $entityManager, ArticleRepository $articleRepository): Response
+    public function likeArticle(SessionInterface $session, UserRepository $repository,$idArticle, ArticleRepository $articleRepository , Request $request, LikeService $likeService): Response
     {
-        try {
+
+       
+
+        $form = $this->createForm(LikeType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
             $article = $articleRepository->find($idArticle);
     
             $myValue = $session->get('my_key');
@@ -50,32 +59,14 @@ class ArticleController extends AbstractController
             }
     
             $userID = $u->getId();
-    
-            // Get the list of likes
-            $likesList = $article->getLikesList() ?? [];
-    
-            if (in_array($userID, $likesList)) {
-                $likesList = array_diff($likesList, array($userID));
-                $article->setLikesList($likesList);
-                $article->setNbLikes($article->getNbLikes() - 1);
-            } else {
-                $likesList[] = $userID;
-                $article->setLikesList($likesList);
-                $article->setNbLikes($article->getNbLikes() + 1);
-            }
-    
-            $entityManager->flush();
-    
+            // Call the like/unlike service method
+            $newLikeCount = $likeService->toggleLike($article, $u);
+
             // Return the updated like count as JSON response
-            $response = [
-                'likes' => $article->getNbLikes(),
-                'user' => $u
-            ];
-    
-            return $this->json($response);
-        } catch (\Exception $e) {
-            return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['likes' => $newLikeCount]);
         }
+
+        return new Response('Invalid request', Response::HTTP_BAD_REQUEST);
     }
     
 
