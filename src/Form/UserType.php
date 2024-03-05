@@ -2,33 +2,55 @@
 
 namespace App\Form;
 
-use App\Enum\RoleEnum;
 use App\Entity\User;
+use App\Enum\RoleEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
 
 class UserType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName')
-            ->add('lastName')
-            ->add('email')
-            ->add('password')
-            ->add('phoneNumber')
-            ->add('region')
-            ->add('rate')
-            ->add('degree')
-            ->add('role', ChoiceType::class, [
-                'choices' => RoleEnum::toArray(),
+            ->add('firstName', null, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('lastName', null, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('email', EmailType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('password', PasswordType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('phoneNumber', TextType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('region', TextType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('rate', TextType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('specialite', TextType::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('role', RoleEnum::class, [
+                'attr' => ['class' => 'form-control mb-3'],
+            ])
+            ->add('Valider', SubmitType::class, [
+                'attr' => ['class' => 'btn btn-primary'],
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => User::class,
