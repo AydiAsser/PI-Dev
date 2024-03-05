@@ -1,0 +1,99 @@
+
+{% block title %}Réponse {{ reponse.id }}{% endblock %}
+
+{% block stylesheets %}
+     
+    <style>
+        /* CSS personnalisé pour la template show.html.twig */
+        .bradcam_area {
+            background-image: url('your-image-url.jpg');
+            background-size: cover;
+            padding: 20px 0; /* Espacement haut et bas */
+            text-align: center;
+        }
+
+        .bradcam_text h3 {
+            color: #fff; /* Couleur du texte */
+            font-size: 36px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0; /* Supprime l'espacement sous le titre */
+        }
+
+        .container {
+            margin-top: 50px; /* Espacement depuis le haut */
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+        }
+
+        .card {
+            max-width: 500px; /* Réduire la largeur */
+            width: 100%; /* Rendre la carte responsive */
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            text-align: center; /* Centrer le texte */
+            margin-bottom: 20px; /* Espacement bas */
+        }
+
+        .card-text {
+            margin-bottom: 20px; /* Espacement bas */
+        }
+
+        .form-control {
+            width: 100%; /* Adapter la largeur des champs au conteneur */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            display: block; /* Pour prendre toute la largeur disponible */
+            width: 100%;
+            padding: 10px 4px;
+            background-color: #28a745; /* Couleur verte pour le bouton */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #218838; /* Couleur verte plus foncée au survol */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <!-- Header Start -->
+    <div class="bradcam_area breadcam_bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="bradcam_text">
+                        <h3>Réponse</h3> <!-- Titre dans le formulaire d'affichage -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Réponse {{ reponse.id }}</h1> <!-- Titre en dehors du formulaire -->
+                <h5 class="card-title">ID: {{ reponse.id }}</h5>
+                <p class="card-text">Sujet: {{ reponse.sujetrep }}</p>
+                <a href="{{ path('app_reponse_index') }}" class="btn btn-primary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

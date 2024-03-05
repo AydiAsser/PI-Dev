@@ -1,0 +1,66 @@
+{# templates/reclamation/new.html.twig #}
+
+
+{% block title %}Nouvelle Réponse{% endblock %}
+{% block stylesheets %}
+     
+    <style>
+        /* CSS personnalisé pour le formulaire */
+        .container {
+            display: flex;
+            justify-content: center; /* Centrer horizontalement */
+            align-items: center; /* Centrer verticalement */
+            height: 100vh; /* Utilisation de toute la hauteur de la fenêtre */
+        }
+
+        .card {
+            max-width: 500px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #28a745; /* Couleur verte pour le bouton */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #218838; /* Couleur verte plus foncée au survol */
+        }
+    </style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="card">
+        <h1 class="my-4">Nouvelle Réponse</h1>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-primary">Ajouter</button>
+            <a href="{{ path('app_reponse_index') }}" class="btn btn-secondary">Annuler</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,11 @@
+{# templates/reclamation/form.html.twig #}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_row(form.sujet) }}
+        {{ form_row(form.description) }}
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+

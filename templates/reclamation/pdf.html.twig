@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Réclamations{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* Reset CSS */
+    body, h1, h2, h3, p, ul, ol, li, figure, figcaption, blockquote, dl, dd, hr {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #007bff; /* Bleu */
+    }
+
+    .reclamations-table {
+        margin-bottom: 20px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+        text-align: left;
+        color: #007bff; /* Bleu */
+    }
+
+    .table td {
+        text-align: center;
+    }
+
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination a {
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 0 4px;
+        background-color: #007bff; /* Bleu */
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    .pagination a:hover {
+        background-color: #0056b3; /* Bleu foncé au survol */
+    }
+
+    /* Ajout de couleurs pour les enregistrements alternés */
+    .table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9; /* Gris très clair */
+    }
+
+    .table tbody tr:hover {
+        background-color: #f2f2f2; /* Gris clair au survol */
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Liste des Réclamations</h1>
+  
+    <div class="reclamations-table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Sujet</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Date de Création</th>
+                    <!-- Ajouter d'autres attributs ici -->
+                </tr>
+            </thead>
+            <tbody>
+            {% for reclamation in reclamations %}
+                <tr>
+                    <td>{{ reclamation.id }}</td>
+                    <td>{{ reclamation.sujet }}</td>
+                    <td>{{ reclamation.description }}</td>
+                    <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                    <!-- Ajouter d'autres attributs ici -->
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucun enregistrement trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        <!-- Ajouter ici la pagination si nécessaire -->
+    </div>
+</div>
+{% endblock %}
+
+

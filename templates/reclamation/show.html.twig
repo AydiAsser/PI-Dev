@@ -1,0 +1,86 @@
+{# templates/reclamation/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Reclamation{% endblock %}
+
+{% block stylesheets %}
+     
+    <style>
+        /* CSS personnalisé pour la présentation de la réclamation */
+        .reclamation-container {
+            max-width: 500px;
+            margin: 50px auto; /* Marge supérieure et inférieure pour centrer verticalement */
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-right: 10px; /* Espacement entre les boutons */
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="reclamation-container">
+    <h1>Reclamation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reclamation.id }}</td>
+            </tr>
+            <tr>
+                <th>Sujet</th>
+                <td>{{ reclamation.sujet }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ reclamation.description }}</td>
+            </tr>
+            <tr>
+                <th>DateCreation</th>
+                <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reclamation_index') }}" class="btn">Back to List</a>
+
+    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn">Edit</a>
+
+    {{ include('reclamation/_delete_form.html.twig') }}
+</div>
+{% endblock %}
+
+

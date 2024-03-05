@@ -1,0 +1,77 @@
+{# templates/reclamation/new.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Nouvelle Réclamation{% endblock %}
+
+{% block stylesheets %}
+     
+    <style>
+        /* CSS personnalisé pour le formulaire */
+        .form-container {
+            max-width: 500px;
+            margin: 200px auto; /* Ajout d'une marge supérieure */
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #28a745; /* Couleur verte pour le bouton */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #218838; /* Couleur verte plus foncée au survol */
+        }
+    </style>
+{% endblock %}
+
+
+
+
+
+
+{% block body %}
+<div class="form-container">
+    <h1>Nouvelle Réclamation</h1>
+    {{ form_start(form) }}
+    <div class="form-group">
+        <label class="form-label" for="{{ form.sujet.vars.id }}">Sujet</label>
+        {{ form_widget(form.sujet, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="{{ form.description.vars.id }}">Description</label>
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="{{ form.dateCreation.vars.id }}">Date de Création</label>
+        {{ form_widget(form.dateCreation, {'attr': {'class': 'form-control'}}) }}
+    </div>
+
+    <button type="submit" class="btn">Créer</button> <!-- Bouton "Créer" au lieu de "Modifier" -->
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+

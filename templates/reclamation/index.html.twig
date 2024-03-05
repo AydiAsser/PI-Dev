@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des Réclamations
+{% endblock %}
+
+{% block stylesheets %}
+     
+    
+{% endblock %}
+
+{% block body %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+
+    <div class="container">
+        <h1>Liste des Réclamations</h1>
+        <a href="{{ path('app_reclamation_new') }}" class="btn">Ajouter</a>
+        <a href="{{ path('reclamations_imprimer_pdf') }}" class="btn">Imprimer</a>
+        <a href="{{ path('reclamations_statistiques') }}" class="btn">Statistiques</a>
+
+        <!-- Formulaire de recherche -->
+        <form action="{{ path('app_reclamation_search') }}" method="POST" class="mb-3">
+            <div class="input-group">
+                <input type="text" name="description" class="form-control" placeholder="Rechercher...">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary">Rechercher</button>
+                </div>
+            </div>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Sujet</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Date de Création</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reclamation in reclamations %}
+                <tr>
+                    <td>{{ reclamation.id }}</td>
+                    <td>{{ reclamation.sujet }}</td>
+                    <td>{{ reclamation.description }}</td>
+                    <td>{{ reclamation.dateCreation ? reclamation.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn">Voir</a>
+                        <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn">Modifier</a>
+                        <form action="{{ path('app_reclamation_delete', {'id': reclamation.id}) }}" method="post" style="display: inline-block;" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette réclamation?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reclamation.id) }}">
+                            <button type="submit" class="btn">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">Aucun enregistrement trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+
