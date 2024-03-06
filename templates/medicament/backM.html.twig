@@ -213,14 +213,9 @@
                   <table class="table text-nowrap mb-0 align-middle">
                     <thead class="text-dark fs-4">
                       <tr>
+                      
                         <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Id</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">id medecin</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">id medicament</h6>
+                          <h6 class="fw-semibold mb-0">Id medicament</h6>
                         </th>
                         <th class="border-bottom-0">
                           <h6 class="fw-semibold mb-0">nom</h6>
@@ -228,9 +223,15 @@
                         <th class="border-bottom-0">
                           <h6 class="fw-semibold mb-0">image</h6>
                         </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">categorie</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">prix</h6>
+                        </th>
                        
                        <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">prix</h6>
+                          <h6 class="fw-semibold mb-0">gestion</h6>
                         </th>
 
 
@@ -240,11 +241,11 @@
                       <tr>
                         {% for a in m %}
             <tr>
-                 <td>1</td>
+                
                 <td>{{ a.id }}</td>
                <td>{{ a.nom }}</td>
                 <td>{{ a.image }}</td>
-                <td>{{ a.description }}</td>
+                <td>{{ a.categorie }}</td>
                 <td>{{ a.prix }}</td>
                 
                 <td>
