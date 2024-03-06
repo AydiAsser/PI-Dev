@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use Twilio\Rest\Client;
 use App\Entity\User;
 use App\Form\UserType;
-use App\Form\ProfileType;
 use App\Form\LoginType;
+use App\Form\MdpType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,11 +16,11 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Address;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use League\OAuth2\Client\Provider\Google;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+
 
 
 class UserController extends AbstractController
@@ -116,7 +117,7 @@ class UserController extends AbstractController
                 $file->move('C:\Users\MSI\Desktop\PI-Dev\public\upload', $fileName);
 
                 $User->setImg("upload/" . $fileName);
-            } else if ($User1->getRole() == 'patient') {
+            } else if ($User1->getRate() == 'patient') {
                 $User->setFirstName($User1->getFirstName());
                 $User->setLastName($User1->getLastName());
                 $User->setEmail($User1->getEmail());
@@ -205,14 +206,14 @@ class UserController extends AbstractController
                     $email->to(new Address($us->getEmail()));
                     $email->subject('Activation de votre compte');
 
-                    $email->html('<h3>Bonjour monsieur/madame' . $us->getNom() . '</h3><p>
+                    $email->html('<h3>Bonjour monsieur/madame' . $us->getFirstName() . '</h3><p>
                      a fin de activer le compte de ce mail:
                      <code>' . $us->getEmail() . '</code></p><p>
                      <a href="http://127.0.0.1:8000/Activation">Clicker ici pour Activer votre compte </a></p><h4>Adminstrateur Healthguard</h4>');
 
                     $mailer->send($email);
                     $this->addFlash('success', "Un email d'activation a été envoyé à votre adresse email. Veuillez vérifier votre boîte de réception pour activer votre compte");
-                    return $this->redirectToRoute('app_log');
+                    return $this->redirectToRoute('app_login');
                 }
             }
         }
@@ -251,14 +252,14 @@ class UserController extends AbstractController
                     $email->to(new Address($us->getEmail()));
                     $email->subject('Activation de votre compte');
 
-                    $email->html('<h3>Bonjour monsieur/madame' . $us->getNom() . '</h3><p>
+                    $email->html('<h3>Bonjour monsieur/madame' . $us->getFirstNom() . '</h3><p>
                      a fin de activer le compte de ce mail:
                      <code>' . $us->getEmail() . '</code></p><p>
                      <a href="http://127.0.0.1:8000/Activation">Clicker ici pour Activer votre compte </a></p><h4>Adminstrateur Healthguard</h4>');
 
                     $mailer->send($email);
                     $this->addFlash('success', "Un email d'activation a été envoyé à votre adresse email. Veuillez vérifier votre boîte de réception pour activer votre compte");
-                    return $this->redirectToRoute('app_log');
+                    return $this->redirectToRoute('app_login');
                 }
             }
         }
@@ -277,7 +278,6 @@ class UserController extends AbstractController
         $em = $doctrine->getManager();
         $em->flush();
         return $this->redirectToRoute("app_user_logged");
-        
     }
 
 
@@ -411,7 +411,7 @@ class UserController extends AbstractController
             $new_user->setEmail($user['email']);
             $new_user->setImg($user['picture']);
             $new_user->setRegion("Megrine");
-            $new_user->setRole("Visiteur");
+            $new_user->setRole("patient");
             $new_user->setPhoneNumber(00000000);
             $new_user->setPassword(sha1(str_shuffle('abscdop123390hHHH;:::OOOI')));
             $new_user->setEtat(1);
@@ -423,5 +423,36 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute("app_user_logged");
         }
+    }
+    #[Route('/mdp_oublie', name: 'app_confirm_rdv')]
+    public function ConfRdvv(Request $request, ManagerRegistry $doctrine, UserRepository $x, SessionInterface $session)
+    {
+        $us = new User();
+        $form = $this->createForm(MdpType::class);
+        $form->handleRequest($request);
+        //$us=$x->findOneByEmail($session->get('my_key')->getEmail()); 
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $us = $x->findById($form->getdata());
+
+
+            $twilio_number = "+16189823797";
+            $accountSid = 'AC69e7af0f7166b47f02469c582f9b0d6f';
+            $authToken = '15e3f2105c5e37dd2c82e807e7740ebd';
+            $twilio = new Client($accountSid, $authToken);
+            $message = $twilio->messages->create("+216" . $us->getPhoneNumber(), array('from' => '+16189823797', 'body' => 'Bonjour monsiour ' . $us->getFirstName() . 'Votre mot de pass est :' . $us->getPassword(),));
+            if ($message->sid) {
+                $sms = 'SMS sent successfully.';
+                $this->addFlash('success', " la reclamation a ete envoyée avec succeée");
+                //$form->getData();
+
+                return  $this->redirectToRoute("app_login");
+            } else {
+                $sms = 'Failed to send SMS.';
+            }
+        }
+
+        return $this->render('user/mdp_oublie.html.twig', array("form" => $form->createView()));
     }
 }

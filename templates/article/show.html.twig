@@ -236,6 +236,7 @@ errorMessageContainer.textContent = '';
 												<p class="comment-content text-justify comment-text mb-0">{{ commentaire.contenu }}</p>
 
 												{# <span class="comment-content">{{ commentaire.contenu }}</span> #}
+						{% if user.id == commentaire.commenter.id %}
 
 												<span style="display: flex; align-items: center;margin-left:0px;">
 													<a style="cursor: pointer; margin-right: 10px;" class="edit-comment-btn">
@@ -250,11 +251,13 @@ errorMessageContainer.textContent = '';
 														</form>
 													</a>
 												</span>
+						{% endif %}
 
 											</div>
 
 											{# </p> #}
 
+						{% if user.id == commentaire.commenter.id %}
 
 											<div class="edit-comment-form d-none">
 												<form class="comment-edit-form" action="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}" method="post">
@@ -266,6 +269,7 @@ errorMessageContainer.textContent = '';
 												</form>
 											</div>
 
+						{% endif %}
 										</div>
 									</div>
 								{% endfor %}
@@ -414,9 +418,11 @@ console.error('Error updating comment:', error);
 		{# <a href="{{ path('app_article_index') }}" class="btn btn-secondary">Back to List</a> #}
 		<a style="margin-left:20px;margin-bottom:20px;" class="genric-btn success radius" href="{{ path('app_article_index') }}">back to list</a>
 
+						{% if user.role == 'medecin' and user.id == article.author.id %}
 		<a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-primary">Edit</a>
-
 		{{ include('article/_delete_form.html.twig') }}
+
+						{% endif  %}
 
 
 	</div>

@@ -131,7 +131,9 @@ articleFilterForm.reset();
 		<h5 class="section-title px-3">Our Blog</h5>
 		<h1 class="mb-4">Popular medical Blogs</h1>
 		<p class="mb-0">Explore the latest insights, trends, and discoveries in the world of medicine. From groundbreaking research to expert opinions, our collection of medical blogs covers a wide range of topics to keep you informed and inspired.</p>
+		{% if user.role == 'medecin' %}
 		<a style="margin-top:60px" href="{{ path('app_article_new')}}" class="genric-btn info-border radius">Add Article</a>
+		{% endif %}
 	</div>
 
 
@@ -186,6 +188,7 @@ articleFilterForm.reset();
 							{% if article.contenu|length > 200 %}...
 							{% endif %}
 						</p>
+						{% if user.role == 'medecin' and user.id == article.author.id %}
 						<div style="display: flex;justify-content: space-between;align-items: center;">
 							<a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-primary rounded-pill py-2 px-4">Read More</a>
 							<form method="post" action="{{ path('app_article_delete', {'id': article.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');" style="margin-bottom: 0;">
@@ -195,6 +198,7 @@ articleFilterForm.reset();
 								</button>
 							</form>
 						</div>
+							{% endif %}
 					</div>
 				</div>
 			</div>

@@ -446,19 +446,22 @@ public function show_api(SessionInterface $session, UserRepository $repository,$
         $myValue = $session->get('my_key')->getId();
         $u=$repository->find($myValue);
         $userID=$u->getId();
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Handle picture file upload
-            $pictureFile = $form->get('pictureFile')->getData();
 
-            if ($pictureFile) {
-                // Generate a unique name for the picture file
-                $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
 
-                // Move the file to the desired directory
-                try {
-                    $pictureFile->move(
-                        $this->getParameter('pictures_directory'),
+        if( $u->getRole() == 'medecin' ) {
+
+    if ($form->isSubmitted() && $form->isValid() ) {
+        // Handle picture file upload
+        $pictureFile = $form->get('pictureFile')->getData();
+        
+        if ($pictureFile) {
+            // Generate a unique name for the picture file
+            $newFilename = uniqid() . '.' . $pictureFile->guessExtension();
+            
+            // Move the file to the desired directory
+            try {
+                $pictureFile->move(
+                    $this->getParameter('pictures_directory'),
                         $newFilename
                     );
                 } catch (FileException $e) {
@@ -468,19 +471,24 @@ public function show_api(SessionInterface $session, UserRepository $repository,$
                 // Update the picture property to store the file name
                 $article->setPicture($newFilename);
             }
-
+            
             $article->setAuthor($u);
             $entityManager->persist($article);
             $entityManager->flush();
-
+            
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
-
+        
         return $this->renderForm('article/new.html.twig', [
             'article' => $article,
             'form' => $form,
             'user' => $u
         ]);
+    }
+
+
+
+    return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
     }
 
 
