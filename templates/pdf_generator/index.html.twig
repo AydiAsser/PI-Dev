@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Resume</title>
+</head>
+    <img src="{{ imageSrc }}" style="width:200px;">
+<body>
+    <div style="margin: 0 auto;display: block;width: 500px;">
+            <center>{{title}}</center><br><br>
+    {% for prescri in prescris %}
+        <table width="100%" border="1">
+           
+
+
+
+             
+
+             <tr>
+               <td colspan="2"><center>
+                  <img src="{{ imageSrc1 }}"            style="width:500px;">
+               </td>
+            
+            </center>
+            </tr>
+            
+            <tr>
+                <th>Id</th>
+                <td>{{ prescri.id }}</td>
+            </tr>
+            <tr>
+                <th>Quantite</th>
+                <td>{{ prescri.quantite }}</td>
+            </tr>
+            <tr>
+                <th>Date_debut</th>
+                <td>{{ prescri.dateDebut ? prescri.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_fin</th>
+                <td>{{ prescri.dateFin ? prescri.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <br>
+        </table>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 #[Route('/reclamation')]
 class ReclamationController extends AbstractController
 {
-
     #[Route('/', name: 'app_reclamation_index', methods: ['GET'])]
     public function index(ReclamationRepository $reclamationRepository): Response
     {
@@ -149,6 +148,11 @@ public function show(Reclamation $reclamation): Response
     public function delete(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reclamation->getId(), $request->request->get('_token'))) {
+
+
+
+
+            
             $entityManager->remove($reclamation);
             $entityManager->flush();
         }

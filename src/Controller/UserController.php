@@ -26,30 +26,27 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class UserController extends AbstractController
 {
     #[Route('/users', name: 'app_user', methods: ['GET'])]
-    public function index(SessionInterface $session, UserRepository $x): Response
+    public function index( UserRepository $x): Response
     {
-        $myValue = $session->get('my_key')->getId();
-        $u = $x->find($myValue);
+    
 
         $formations = $x->findAll();
         $User = new User();
 
         return $this->render(
             'user/admin_show.html.twig',
-            array("users" => $formations, "user" => $u)
+            array("users" => $formations)
         );
     }
 
     #[Route('/addUser', name: 'app_AddUser')]
-    public function addUser(SessionInterface $session, Request $request, ManagerRegistry  $doctrine, UserRepository $x): Response
+    public function addUser( Request $request, ManagerRegistry  $doctrine, UserRepository $x): Response
     {
         $User = new User();
 
         $form = $this->createForm(UserType::class, $User);
         $form->handleRequest($request);
 
-        $myValue = $session->get('my_key')->getId();
-        $u = $x->find($myValue);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -85,21 +82,19 @@ class UserController extends AbstractController
                 }
             }
 
-            return $this->render('user/admin_new.html.twig', array("form" => $form->createView(), "user" => $u));
+            return $this->render('user/admin_new.html.twig', array("form" => $form->createView()));
         }
     }
 
     #[Route('/modifier/{id}', name: 'app_UpdateUser')]
-    public function updateUser(SessionInterface $session, Request $request, int $id, ManagerRegistry  $doctrine, UserRepository $x): Response
+    public function updateUser(Request $request, int $id, ManagerRegistry  $doctrine, UserRepository $x): Response
     {
         $User = new User();
         $User = $x->find($id);
         $form = $this->createForm(UserType::class, $User);
 
         $form->handleRequest($request);
-        $myValue = $session->get('my_key')->getId();
-        $u = $x->find($myValue);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $User1 = $form->getdata();
             if ($User1->getRate() == 'medecin') {
@@ -130,7 +125,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('app_user');
         }
-        return $this->render('user/admin_edit.html.twig', array("form" => $form->createView(), "user" => $u));
+        return $this->render('user/admin_edit.html.twig', array("form" => $form->createView()));
     }
 
     #[Route('/supprimer/{id}', name: 'app_RemoveUser')]
@@ -424,8 +419,11 @@ class UserController extends AbstractController
             return $this->redirectToRoute("app_user_logged");
         }
     }
+   
+    
+
     #[Route('/mdp_oublie', name: 'app_confirm_rdv')]
-    public function ConfRdvv(Request $request, ManagerRegistry $doctrine, UserRepository $x, SessionInterface $session)
+    public function ConfRdvv(Request $request, UserRepository $repository, $id, ManagerRegistry $doctrine, UserRepository $x, SessionInterface $session)
     {
         $us = new User();
         $form = $this->createForm(MdpType::class);
@@ -434,14 +432,15 @@ class UserController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $us = $x->findById($form->getdata());
+            $us = $repository->find($id);
+            $u = $x->findById($form->getdata());
 
 
             $twilio_number = "+16189823797";
             $accountSid = 'AC69e7af0f7166b47f02469c582f9b0d6f';
             $authToken = '15e3f2105c5e37dd2c82e807e7740ebd';
             $twilio = new Client($accountSid, $authToken);
-            $message = $twilio->messages->create("+216" . $us->getPhoneNumber(), array('from' => '+16189823797', 'body' => 'Bonjour monsiour ' . $us->getFirstName() . 'Votre mot de pass est :' . $us->getPassword(),));
+            $message = $twilio->messages->create("+216" . $u->getPhoneNumber(), array('from' => '+16189823797', 'body' => 'Bonjour monsiour ' . $us->getFirstName() . 'Votre mot de pass est :' . $u->getPassword(),));
             if ($message->sid) {
                 $sms = 'SMS sent successfully.';
                 $this->addFlash('success', " la reclamation a ete envoyée avec succeée");
@@ -456,3 +455,5 @@ class UserController extends AbstractController
         return $this->render('user/mdp_oublie.html.twig', array("form" => $form->createView()));
     }
 }
+
+

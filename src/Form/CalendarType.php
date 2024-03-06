@@ -51,7 +51,7 @@ class CalendarType extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->andWhere('u.role = :role')
-                        ->setParameter('role', 'Medecin');
+                        ->setParameter('role', 'medecin');
                 },
            
             ])

@@ -217,8 +217,8 @@
                             
 <td class="border-bottom-0">
                                 <div class="d-flex gap-2">
-                                    <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-primary">Show</a>
-                                    <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-secondary">Edit</a>
+                                    <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-primary">Edit</a>
+                                    <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-secondary">Show</a>
                                     {{ include('reponse/_delete_form.html.twig') }}
 
                                 </div>
@@ -226,7 +226,6 @@
                         </tr>
                     
                         <tr>
-                            <td colspan="7">No records found</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -296,7 +295,6 @@
                         </tr>
                     
                         <tr>
-                            <td colspan="7">No records found</td>
                         </tr>
                         {% endfor %}
                     </tbody>

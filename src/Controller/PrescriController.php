@@ -21,8 +21,38 @@ class PrescriController extends AbstractController
             'prescris' => $prescriRepository->findAll(),
         ]);
     }
+   
 
 
+    #[Route('/2', name: 'app_prescri_indexdzd', methods: ['GET'])]
+    public function indexdzsa(PrescriRepository $prescriRepository): Response
+    {
+        return $this->render('prescri/frontPre.html.twig', [
+            'prescris' => $prescriRepository->findAll(),
+        ]);
+    }
+
+
+
+    #[Route('/new1', name: 'app_presdcri_new', methods: ['GET', 'POST'])]
+    public function nedw(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $prescri = new Prescri();
+        $form = $this->createForm(PrescriType::class, $prescri);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($prescri);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_prescri_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('prescri/frontPre.html.twig', [
+            'prescri' => $prescri,
+            'form' => $form,
+        ]);
+    }
 
 
     #[Route('/1', name: 'app_prescri_indexda', methods: ['GET'])]

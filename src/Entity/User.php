@@ -58,7 +58,7 @@ class User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialite = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     #[Assert\Length(max: 255, maxMessage: "Le nom du fichier image ne peut pas dépasser {{ limit }} caractères.")]
     private ?string $img = null;
 
@@ -68,7 +68,7 @@ class User
     #[ORM\Column(length: 255)]
     private ?int $etat = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?int $dispo = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class)]
